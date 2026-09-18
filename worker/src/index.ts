@@ -13,10 +13,19 @@ export interface Env {
 
 const DEFAULT_USERNAME = 'erfanjalali2007';
 
+const ALLOWED_ORIGINS = [
+  'https://erfanjalali2007.github.io',
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'http://127.0.0.1:3000',
+  'http://127.0.0.1:8787',
+];
+
 function getCorsHeaders(request: Request): Record<string, string> {
-  const origin = request.headers.get('Origin') || '*';
+  const origin = request.headers.get('Origin') || '';
+  const allowOrigin = ALLOWED_ORIGINS.includes(origin) || origin.endsWith('.github.io') ? origin : '*';
   return {
-    'Access-Control-Allow-Origin': origin,
+    'Access-Control-Allow-Origin': allowOrigin,
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Max-Age': '86400',
@@ -198,9 +207,9 @@ export default {
                   {
                     title: subject ? `Subject: ${subject}` : 'Portfolio Contact Inquiry',
                     fields: [
-                      { name: 'Name', value: name.trim(), inline: true },
-                      { name: 'Email', value: email.trim(), inline: true },
-                      { name: 'Message', value: message.trim() },
+                      { name: 'Name', value: name.trim().slice(0, 256), inline: true },
+                      { name: 'Email', value: email.trim().slice(0, 256), inline: true },
+                      { name: 'Message', value: message.trim().slice(0, 1024) },
                     ],
                     color: 0xe11d48, // Liquid ruby color
                     timestamp: new Date().toISOString(),
