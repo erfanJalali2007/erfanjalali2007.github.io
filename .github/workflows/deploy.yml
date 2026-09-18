@@ -32,6 +32,8 @@ jobs:
         run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
 
       - name: Build frontend
+        env:
+          VITE_WORKER_URL: https://erfanjalali-portfolio-worker.erfanjalaliwork-842.workers.dev
         run: npm run build
 
       - name: Setup Pages

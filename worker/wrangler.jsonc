@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "erfanjalali-portfolio-worker",
+  "account_id": "842d203dee291af7b6c13570113590d0",
   "main": "src/index.ts",
   "compatibility_date": "2024-09-23",
   "compatibility_flags": [
