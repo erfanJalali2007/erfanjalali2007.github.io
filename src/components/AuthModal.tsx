@@ -373,9 +373,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       placeholder="admin یا user"
                       className="w-full px-3.5 py-2 rounded-xl bg-black/30 border border-white/20 text-xs sm:text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-white/40"
                     />
-                    <div className="text-[10px] text-slate-400 mt-1 font-mono">
-                      راهنما: <code className="text-amber-300 font-semibold">admin</code> (رمز: <code className="text-amber-300">admin123</code>) یا <code className="text-slate-200">user</code> (رمز: <code className="text-slate-200">user123</code>)
-                    </div>
+
                   </div>
 
                   <div>
