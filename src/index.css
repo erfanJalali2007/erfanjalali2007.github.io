@@ -25,7 +25,7 @@
   }
 }
 
-/* Minimal Custom Scrollbar for Liquid Glass */
+/* Minimal Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -49,7 +49,7 @@
   scrollbar-width: none;
 }
 
-/* Liquid Glass optical utility classes */
+/* Glassmorphism & backdrop utility classes */
 .glass-specular-border {
   border: 1px solid rgba(255, 255, 255, 0.22);
   box-shadow: 
@@ -220,5 +220,28 @@
   opacity: 1;
 }
 
+/* Custom Styled Scrollbar for Modal Content */
+.custom-modal-scrollbar::-webkit-scrollbar {
+  width: 7px;
+}
 
+.custom-modal-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 9999px;
+  margin: 6px 0;
+}
 
+.custom-modal-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.custom-modal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.custom-modal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) rgba(255, 255, 255, 0.04);
+}

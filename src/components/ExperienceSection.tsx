@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { GlassTheme } from '../types';
-import { EXPERIENCES_DATA } from '../data/portfolioData';
-import { Briefcase, Calendar, CheckCircle2, Award, ArrowUpRight } from 'lucide-react';
+import { usePortfolio } from '../context/PortfolioContext';
+import { Briefcase, Calendar, CheckCircle2, Award, ArrowUpRight, Edit2 } from 'lucide-react';
 
 interface ExperienceSectionProps {
   theme: GlassTheme;
@@ -13,6 +13,8 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({
   theme,
   blurLevel,
 }) => {
+  const { experiencesData, currentUser, setIsAdminEditorOpen, setAdminActiveTab } = usePortfolio();
+
   return (
     <motion.div
       id="experience-section-container"
@@ -41,24 +43,42 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({
           }}
         />
 
-        <div className="flex items-center gap-2 mb-2">
-          <span className="relative flex h-2 w-2">
-            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${theme.accentClass.ping} opacity-75`} />
-            <span className={`relative inline-flex rounded-full h-2 w-2 ${theme.accentClass.dot}`} />
-          </span>
-          <span className="text-xs uppercase tracking-wider font-semibold text-slate-300/80">
-            Career Timeline & History
-          </span>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="relative flex h-2 w-2">
+                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${theme.accentClass.ping} opacity-75`} />
+                <span className={`relative inline-flex rounded-full h-2 w-2 ${theme.accentClass.dot}`} />
+              </span>
+              <span className="text-xs uppercase tracking-wider font-semibold text-slate-300/80">
+                Career Timeline & History
+              </span>
+            </div>
+            <h2 className="text-2xl font-light text-white">Experience & Background</h2>
+            <p className="text-xs sm:text-sm text-slate-400 font-light mt-1">
+              Professional game engineering, commercial shader production, and competitive game jams.
+            </p>
+          </div>
+
+          {currentUser?.role === 'admin' && (
+            <button
+              onClick={() => {
+                setAdminActiveTab('experience');
+                setIsAdminEditorOpen(true);
+              }}
+              className="px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-mono text-xs font-semibold border border-amber-500/40 flex items-center gap-1.5 transition-all cursor-pointer shadow-sm shrink-0 self-start sm:self-auto"
+              title="ویرایش سوابق شغلی"
+            >
+              <Edit2 size={13} />
+              <span>ویرایش سوابق</span>
+            </button>
+          )}
         </div>
-        <h2 className="text-2xl font-light text-white">Experience & Background</h2>
-        <p className="text-xs sm:text-sm text-slate-400 font-light mt-1">
-          Professional game engineering, commercial shader production, and competitive game jams.
-        </p>
       </div>
 
       {/* Timeline List */}
       <div className="space-y-5">
-        {EXPERIENCES_DATA.map((exp, idx) => (
+        {experiencesData.map((exp, idx) => (
           <div
             key={exp.id}
             id={`experience-card-${exp.id}`}

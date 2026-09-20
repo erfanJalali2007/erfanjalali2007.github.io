@@ -1,1 +1,6 @@
-{"name":"Liquid Glass","description":"Erfan Jalali\u0027s professional Game Developer \u0026 Unity Programmer portfolio in the signature Liquid Glass design system.","requestFramePermissions":[],"majorCapabilities":["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]}
+{
+  "name": "Erfan Jalali Portfolio",
+  "description": "Erfan Jalali - Senior Game Developer & Unity Systems Programmer portfolio showcasing commercial game projects, custom HLSL shaders, and gameplay architecture.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

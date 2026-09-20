@@ -1,309 +1,326 @@
-import { Project, SkillCategory, ExperienceItem, ProfileInfo } from '../types';
+// THIS FILE IS AUTOMATICALLY SYNCHRONIZED WITH YOUR PORTFOLIO SETTINGS & ASSETS
+// Any changes saved in the Admin Studio are permanently baked into this file and /public/projects/images/
+
+import { Project, SkillCategory, ExperienceItem, ProfileInfo, ContactDetails } from '../types';
 
 export const PROFILE_DATA: ProfileInfo = {
-  name: 'Erfan Jalali',
-  title: 'Game Developer & Unity Programmer',
-  tagline: 'Crafting immersive interactive worlds, high-performance gameplay systems, and real-time graphics shaders.',
-  bio: 'Specialized in Unity game development, C# architecture, and HLSL shaders. Passionate about responsive game feel, deterministic physics, and zero-allocation engine systems that push hardware to its absolute limit.',
-  email: 'erfanjalaliwork@gmail.com',
-  location: 'Remote / Worldwide',
-  availability: 'Open to Contracts & Full-Time Roles',
-  stats: [
-    { label: 'Years Experience', value: '5+' },
-    { label: 'Shipped Projects', value: '12+' },
-    { label: 'Custom Shaders', value: '40+' },
-    { label: 'Game Jam Titles', value: '8' },
+  "name": "Erfan Jalali",
+  "title": "Game Developer & Unity Programmer",
+  "tagline": "Crafting immersive interactive worlds, high-performance gameplay systems, and real-time graphics shaders.",
+  "bio": "Specialized in Unity game development, C# architecture, and HLSL shaders. Passionate about responsive game feel, deterministic physics, and zero-allocation engine systems that push hardware to its absolute limit.",
+  "email": "erfanjalaliwork@gmail.com",
+  "location": "Remote / Worldwide",
+  "availability": "Open to Contracts & Full-Time Roles",
+  "stats": [
+    {
+      "label": "Years Experience",
+      "value": "4+"
+    },
+    {
+      "label": "Editor tools project",
+      "value": "20+"
+    },
+    {
+      "label": "Custom Shaders",
+      "value": "2"
+    },
+    {
+      "label": "Game Jam Titles",
+      "value": "3"
+    }
   ],
-  socials: [
-    { name: 'GitHub', url: 'https://github.com/erfanjalali2007', icon: 'Github' },
-    { name: 'Portfolio Repo', url: 'https://github.com/erfanjalali2007/erfanjalali2007.github.io', icon: 'Github' },
-    { name: 'LinkedIn', url: 'https://linkedin.com/in/erfanjalali', icon: 'Linkedin' },
-    { name: 'Itch.io', url: 'https://erfanjalali.itch.io', icon: 'Gamepad2' },
-    { name: 'Email', url: 'mailto:erfanjalaliwork@gmail.com', icon: 'Mail' },
-  ],
+  "socials": [
+    {
+      "id": "github",
+      "name": "GitHub",
+      "url": "https://github.com/erfanjalali2007",
+      "icon": "Github"
+    },
+    {
+      "id": "portfolio-repo",
+      "name": "Portfolio Repo",
+      "url": "https://github.com/erfanjalali2007/erfanjalali2007.github.io",
+      "icon": "Github"
+    },
+    {
+      "id": "linkedin",
+      "name": "LinkedIn",
+      "url": "https://www.linkedin.com/in/erfan-jalali-768b4b3ab/",
+      "icon": "Linkedin"
+    },
+    {
+      "id": "itchio",
+      "name": "Itch.io",
+      "url": "https://erfanjalalii.itch.io/",
+      "icon": "Gamepad2"
+    },
+    {
+      "id": "email",
+      "name": "Email",
+      "url": "mailto:erfanjalaliwork@gmail.com",
+      "icon": "Mail"
+    }
+  ]
+};
+
+export const DEFAULT_CONTACT_DETAILS: ContactDetails = {
+  "heading": "Let's build together",
+  "subheading": "Available for game development contracts, Unity systems programming, shader engineering, and technical advisory.",
+  "email": "erfanjalaliwork@gmail.com",
+  "location": "Remote / Worldwide",
+  "responseTime": "Response time within 24 hours",
+  "formHeading": "Send a Message",
+  "formSubheading": "Have a project, game jam idea, or technical question? Drop a note below.",
+  "socials": [
+    {
+      "id": "github",
+      "name": "GitHub",
+      "url": "https://github.com/erfanjalali2007",
+      "icon": "Github"
+    },
+    {
+      "id": "linkedin",
+      "name": "LinkedIn",
+      "url": "https://www.linkedin.com/in/erfan-jalali-768b4b3ab/",
+      "icon": "Linkedin"
+    },
+    {
+      "id": "itchio",
+      "name": "Itch.io",
+      "url": "https://erfanjalalii.itch.io/",
+      "icon": "Gamepad2"
+    }
+  ]
 };
 
 export const SKILL_CATEGORIES: SkillCategory[] = [
   {
-    id: 'engines',
-    name: 'Game Engines & Runtimes',
-    icon: 'Cpu',
-    description: 'Core engine architectures, render pipelines, and runtime optimization',
-    skills: [
-      { name: 'Unity 2022/6 (URP & HDRP)', level: 95, tag: 'Expert' },
-      { name: 'Unity DOTS / ECS & Job System', level: 85, tag: 'Advanced' },
-      { name: 'C# Gameplay Architecture', level: 95, tag: 'Expert' },
-      { name: 'Physics & Collision Systems', level: 90, tag: 'Advanced' },
-      { name: 'Custom Scriptable Render Pipelines', level: 82, tag: 'Specialist' },
-    ],
+    "id": "engines",
+    "name": "Game Engines & Runtimes",
+    "icon": "Cpu",
+    "description": "Core engine architectures, render pipelines, and runtime optimization",
+    "skills": [
+      {
+        "name": "Unity 2022/6 (URP & HDRP)",
+        "level": 95,
+        "tag": "Expert"
+      },
+      {
+        "name": "Unity DOTS / ECS & Job System",
+        "level": 85,
+        "tag": "Advanced"
+      },
+      {
+        "name": "C# Gameplay Architecture",
+        "level": 95,
+        "tag": "Expert"
+      },
+      {
+        "name": "Physics & Collision Systems",
+        "level": 90,
+        "tag": "Advanced"
+      },
+      {
+        "name": "Custom Scriptable Render Pipelines",
+        "level": 82,
+        "tag": "Specialist"
+      }
+    ]
   },
   {
-    id: 'graphics',
-    name: 'Graphics & Shaders',
-    icon: 'Sparkles',
-    description: 'Custom HLSL, compute passes, screen-space caustics, and VFX',
-    skills: [
-      { name: 'HLSL / Shader Graph', level: 90, tag: 'Advanced' },
-      { name: 'VFX Graph & Particle Systems', level: 88, tag: 'Advanced' },
-      { name: 'Liquid & Caustics Simulation', level: 92, tag: 'Specialist' },
-      { name: 'Post-Processing & Volumetric Fog', level: 85, tag: 'Advanced' },
-      { name: 'RenderDoc & Frame Profiling', level: 84, tag: 'Proficient' },
-    ],
+    "id": "graphics",
+    "name": "Graphics & Shaders",
+    "icon": "Sparkles",
+    "description": "Custom HLSL, compute passes, screen-space caustics, and VFX",
+    "skills": [
+      {
+        "name": "HLSL / Shader Graph",
+        "level": 71,
+        "tag": "Advanced"
+      },
+      {
+        "name": "VFX Graph & Particle Systems",
+        "level": 88,
+        "tag": "Advanced"
+      },
+      {
+        "name": "Liquid & Caustics Simulation",
+        "level": 92,
+        "tag": "Specialist"
+      },
+      {
+        "name": "Post-Processing & Volumetric Fog",
+        "level": 85,
+        "tag": "Advanced"
+      },
+      {
+        "name": "RenderDoc & Frame Profiling",
+        "level": 84,
+        "tag": "Proficient"
+      }
+    ]
   },
   {
-    id: 'systems',
-    name: 'Systems & Architecture',
-    icon: 'Layers',
-    description: 'Design patterns, state management, and memory optimization',
-    skills: [
-      { name: 'State Machines & Behavior Trees', level: 94, tag: 'Expert' },
-      { name: 'Object Pooling & Zero-GC Loops', level: 92, tag: 'Specialist' },
-      { name: 'Procedural Level Generation', level: 88, tag: 'Advanced' },
-      { name: 'A* Pathfinding & Spatial Hashes', level: 86, tag: 'Advanced' },
-      { name: 'Save/Load Serialization (Binary/JSON)', level: 90, tag: 'Advanced' },
-    ],
+    "id": "systems",
+    "name": "Systems & Architecture",
+    "icon": "Layers",
+    "description": "Design patterns, state management, and memory optimization",
+    "skills": [
+      {
+        "name": "State Machines & Behavior Trees",
+        "level": 94,
+        "tag": "Expert"
+      },
+      {
+        "name": "Object Pooling & Zero-GC Loops",
+        "level": 92,
+        "tag": "Specialist"
+      },
+      {
+        "name": "Procedural Level Generation",
+        "level": 88,
+        "tag": "Advanced"
+      },
+      {
+        "name": "A* Pathfinding & Spatial Hashes",
+        "level": 86,
+        "tag": "Advanced"
+      }
+    ]
   },
   {
-    id: 'tools',
-    name: 'Languages & Tooling',
-    icon: 'Terminal',
-    description: 'Programming languages, version control, and development tools',
-    skills: [
-      { name: 'C# (.NET 8)', level: 96, tag: 'Expert' },
-      { name: 'C++ & Native Plugins', level: 78, tag: 'Proficient' },
-      { name: 'TypeScript & WebGL Runtimes', level: 84, tag: 'Advanced' },
-      { name: 'Git & LFS Version Control', level: 92, tag: 'Expert' },
-      { name: 'Blender (3D Modeling & Rigging)', level: 75, tag: 'Intermediate' },
-    ],
-  },
+    "id": "tools",
+    "name": "Languages & Tooling",
+    "icon": "Terminal",
+    "description": "Programming languages, version control, and development tools",
+    "skills": [
+      {
+        "name": "C# (.NET 8)",
+        "level": 81,
+        "tag": "Advanced"
+      },
+      {
+        "name": "Java",
+        "level": 50,
+        "tag": "Intermediate"
+      }
+    ]
+  }
 ];
 
 export const PROJECTS_DATA: Project[] = [
   {
-    id: 'forsaken-hospital',
-    title: 'Forsaken Hospital Prototype',
-    shortDescription: 'Modular C# gameplay framework for First-Person Survival Horror in Unity with procedural weapons, interactions, and custom Editor tools.',
-    fullDescription: 'A modular C# gameplay framework for First-Person Survival Horror games in Unity, featuring procedural weapons, interactions, flashlight battery mechanics, physical item examination, and custom Editor tools. Engineered with clean decoupled events and zero-allocation raycasting for stutter-free performance.',
-    category: 'unity',
-    engine: 'Unity (URP) & C#',
-    status: 'In Development',
-    platform: ['PC / Windows'],
-    technologies: ['Unity', 'C#', 'URP', 'Editor Scripting', 'Physics Raycasting', 'Audio Spatialization'],
-    features: [
-      'Procedural first-person weapon sway, sprint bobbing, and aim smoothing',
-      'Physical item inspection system with rotational 3D examination',
-      'Flashlight power consumption with flicker states and battery mechanics',
-      'Interactive door and drawer physics with analog mouse drag manipulation',
-      'Modular inventory grid with sound propagation and event dispatchers',
+    "id": "forsaken-hospital",
+    "title": "Forsaken Hospital Prototype",
+    "shortDescription": "Modular C# gameplay framework for First-Person Survival Horror in Unity with procedural weapons, interactions, and custom Editor tools.",
+    "fullDescription": "A modular C# gameplay framework for First-Person Survival Horror games in Unity, featuring procedural weapons, interactions, flashlight battery mechanics, physical item examination, and custom Editor tools. Engineered with clean decoupled events and zero-allocation raycasting for stutter-free performance.",
+    "category": "unity",
+    "engine": "Unity (URP) & C#",
+    "status": "Completed",
+    "platform": [
+      "PC / Windows",
+      "Itch.io",
+      "Linux",
+      "Steam",
+      "macOS"
     ],
-    githubUrl: 'https://github.com/erfanJalali2007/Forsaken-Hospital-Prototype',
-    demoUrl: 'https://github.com/erfanJalali2007/Forsaken-Hospital-Prototype',
-    imageBanner: 'radial-gradient(135deg, rgba(225, 29, 72, 0.45) 0%, rgba(15, 23, 42, 0.8) 100%)',
-    highlights: [
-      'Modular architecture enabling rapid horror game mechanics authoring',
-      'Zero-allocation raycasting and event delegates avoiding GC stutter',
-      'Custom Unity Editor tools for rapid level designer workflow',
+    "technologies": [
+      "Unity",
+      "C#",
+      "URP",
+      "Editor Scripting",
+      "Physics Raycasting",
+      "Audio Spatialization"
     ],
+    "features": [
+      "Procedural first-person weapon sway, sprint bobbing, and aim smoothing",
+      "Physical item inspection system with rotational 3D examination",
+      "Flashlight power consumption with flicker states and battery mechanics",
+      "Interactive door and drawer physics with analog mouse drag manipulation",
+      "Modular inventory grid with sound propagation and event dispatchers"
+    ],
+    "githubUrl": "https://github.com/erfanJalali2007/Forsaken-Hospital-Prototype",
+    "demoUrl": "",
+    "imageBanner": "/projects/images/forsaken-hospital-1789926132977-0919-1-2.png",
+    "highlights": [
+      "Modular architecture enabling rapid horror game mechanics authoring",
+      "Zero-allocation raycasting and event delegates avoiding GC stutter",
+      "Custom Unity Editor tools for rapid level designer workflow"
+    ],
+    "galleryImages": [
+      "/projects/images/forsaken-hospital-1789926132977-0919-1-2.png",
+      "/projects/images/forsaken-hospital-1789928671888-0919-1-4.png",
+      "/projects/images/forsaken-hospital-gallery-2.png",
+      "/projects/images/forsaken-hospital-1789929696163-0919-1-1.png",
+      "/projects/images/forsaken-hospital-1789931052843-0919-1-5.png",
+      "/projects/images/forsaken-hospital-1789931209878-0919-1-3.png",
+      "/projects/images/forsaken-hospital-1789931517081-0919-1-6.png"
+    ],
+    "releaseDate": "Sep 2026"
   },
   {
-    id: 'chrono-veil',
-    title: 'Aetheria: Chrono Veil',
-    shortDescription: '3D Action-Adventure with time-dilation mechanics, custom dynamic lighting, and responsive melee combat in Unity URP.',
-    fullDescription: 'A third-person action game built in Unity featuring real-time localized time dilation fields. Enemies and projectiles caught within temporal rifts decelerate with custom mathematical wave equations while the player maneuvers at standard velocity. Built with custom character controller physics, state-machine combat chaining, and an event-driven audio reverberation system.',
-    category: 'unity',
-    engine: 'Unity 2022.3 LTS (URP)',
-    status: 'Completed',
-    platform: ['PC / Steam', 'WebGL Demo'],
-    technologies: ['Unity', 'C#', 'HLSL', 'Cinemachine', 'Custom Physics', 'FMOD'],
-    features: [
-      'Localized temporal bubble physics with spatial distortion shaders',
-      'Combo combat state machine with animation cancel windows',
-      'Zero-allocation object pooling for all particle impacts and projectiles',
-      'Dynamic camera controller with cinematic collision avoidance',
-      'Interactive boss encounter with multi-phase behavior trees',
+    "id": "vanguard-tactics",
+    "title": "Dark House",
+    "shortDescription": "Turn-based squad tactical RPG with procedural hex battlefields, cover systems, and modular ability card synergy.",
+    "fullDescription": "An isometric tactical combat prototype featuring procedural grid generation with elevation differentials, Line-of-Sight (LOS) Raycast queries, and dynamic cover bonuses. Features a modular skill scripting architecture where gameplay effects are defined as composable ScriptableObjects.",
+    "category": "unity",
+    "engine": "Unity 2022.3 LTS",
+    "status": "Completed",
+    "platform": [
+      "Mobile (Android / iOS)",
+      "Android",
+      "iOS"
     ],
-    githubUrl: 'https://github.com/erfanjalali/chrono-veil-core',
-    demoUrl: 'https://erfanjalali.itch.io/chrono-veil',
-    imageBanner: 'radial-gradient(135deg, rgba(225, 29, 72, 0.4) 0%, rgba(30, 27, 75, 0.6) 100%)',
-    highlights: [
-      'Engineered custom time-manager controlling Time.timeScale and local delta overrides per entity',
-      'Authored custom screen-space refraction shader simulating shockwaves without rendering artifacts',
-      'Maintained steady 120 FPS on mid-tier hardware with strict memory budgets',
+    "technologies": [
+      "Unity",
+      "C#",
+      "ScriptableObjects",
+      "Hex Math",
+      "DoTween",
+      "Cinemachine"
     ],
-  },
-  {
-    id: 'caustics-suite',
-    title: 'Liquid Caustics & Glass Shader Suite',
-    shortDescription: 'Production-ready HLSL shader collection for realistic refractive liquid glass, water caustics, and chromatic dispersion.',
-    fullDescription: 'A modular shader library developed for Unity Universal Render Pipeline (URP). Solves physical light refraction, Total Internal Reflection (TIR), and animated procedural caustic patterns using Gerstner wave calculations and Voronoi noise. Supports planar reflections and screen-space distortion with depth-based color absorption (Beer-Lambert law).',
-    category: 'graphics',
-    engine: 'Unity 6 & URP / HLSL',
-    status: 'Completed',
-    platform: ['PC', 'Mobile', 'Console'],
-    technologies: ['HLSL', 'Compute Shaders', 'URP Custom Passes', 'RenderDoc', 'C#'],
-    features: [
-      'Physical Beer-Lambert light absorption for realistic water and glass opacity',
-      'Chromatically separated refraction (RGB channel offset for dispersion)',
-      'Subsurface scattering approximation for thick volumetric liquids',
-      'Single-pass compute shader generating dynamic ripple maps from player interaction',
-      'Comprehensive inspector GUI with live material property drawers',
+    "features": [
+      "Hexagonal grid coordinates with Dijkstra path-cost computation and hazard penalties",
+      "Volumetric Line-of-Sight calculation with partial and full cover mitigation",
+      "Action-point (AP) economy with reaction overwatch triggers",
+      "Modular Card/Ability system serializable into JSON save states",
+      "Custom inspector node-graph tool for editing ability dependencies"
     ],
-    githubUrl: 'https://github.com/erfanjalali/unity-liquid-caustics-suite',
-    demoUrl: 'https://github.com/erfanjalali/unity-liquid-caustics-suite#demo',
-    imageBanner: 'radial-gradient(135deg, rgba(56, 189, 248, 0.4) 0%, rgba(99, 102, 241, 0.5) 100%)',
-    highlights: [
-      'Profiled and verified with RenderDoc for sub-millisecond draw overhead',
-      'Includes ready-to-use prefabs for glass bottles, water ponds, and optical lenses',
-      'Over 500+ GitHub stars across community game dev repositories',
+    "githubUrl": "https://github.com/erfanjalali/vanguard-tactics-engine",
+    "demoUrl": "https://erfanjalali.itch.io/vanguard-tactics",
+    "imageBanner": "/projects/images/dark-house-cover.svg",
+    "highlights": [
+      "Developed custom node-based visual ability editor inside Unity Editor GUI",
+      "Implemented robust turn-based undo/redo replay recording stack",
+      "Clean separation between deterministic game rules and presentation view"
     ],
-  },
-  {
-    id: 'nexus-ecs',
-    title: 'Nexus DOTS Swarm Architecture',
-    shortDescription: 'High-throughput crowd simulation and tactical AI framework handling 15,000+ autonomous entities at 60 FPS in Unity.',
-    fullDescription: 'Designed around Unity DOTS (Entities 1.0, Job System, and Burst Compiler). Demonstrates flocking behaviors, collision avoidance, and path requests over a continuous navmesh via a custom multi-threaded spatial hashing grid. Includes an in-engine telemetry visualizer for CPU thread utilization and memory caches.',
-    category: 'systems',
-    engine: 'Unity DOTS (Entities 1.0 + Burst)',
-    status: 'Completed',
-    platform: ['PC'],
-    technologies: ['C#', 'DOTS/ECS', 'Burst Compiler', 'Job System', 'SIMD Math'],
-    features: [
-      'Burst-compiled Boids simulation with separation, alignment, and cohesion vectors',
-      'Spatial partitioning grid using Morton codes for L1/L2 cache locality',
-      'Hierarchical state evaluation for squad leaders and unit commands',
-      'Custom instanced indirect mesh rendering bypassing GameObjects',
-      'Live runtime inspector for thread performance and entity metrics',
+    "galleryImages": [
+      "/projects/images/dark-house-cover.svg"
     ],
-    githubUrl: 'https://github.com/erfanjalali/nexus-dots-swarm',
-    demoUrl: 'https://github.com/erfanjalali/nexus-dots-swarm#benchmarks',
-    imageBanner: 'radial-gradient(135deg, rgba(168, 85, 247, 0.4) 0%, rgba(15, 23, 42, 0.7) 100%)',
-    highlights: [
-      'Zero garbage collector allocations during continuous crowd simulation loops',
-      'Achieved 15,000 active entities at 60+ FPS on standard 6-core processors',
-      'Decoupled simulation state from visual presentation for clean network sync',
-    ],
-  },
-  {
-    id: 'vanguard-tactics',
-    title: 'Vanguard: Grid Tactics',
-    shortDescription: 'Turn-based squad tactical RPG with procedural hex battlefields, cover systems, and modular ability card synergy.',
-    fullDescription: 'An isometric tactical combat prototype featuring procedural grid generation with elevation differentials, Line-of-Sight (LOS) Raycast queries, and dynamic cover bonuses. Features a modular skill scripting architecture where gameplay effects are defined as composable ScriptableObjects.',
-    category: 'unity',
-    engine: 'Unity 2022.3 LTS',
-    status: 'In Development',
-    platform: ['PC', 'Steam', 'Nintendo Switch Target'],
-    technologies: ['Unity', 'C#', 'ScriptableObjects', 'Hex Math', 'DoTween', 'Cinemachine'],
-    features: [
-      'Hexagonal grid coordinates with Dijkstra path-cost computation and hazard penalties',
-      'Volumetric Line-of-Sight calculation with partial and full cover mitigation',
-      'Action-point (AP) economy with reaction overwatch triggers',
-      'Modular Card/Ability system serializable into JSON save states',
-      'Custom inspector node-graph tool for editing ability dependencies',
-    ],
-    githubUrl: 'https://github.com/erfanjalali/vanguard-tactics-engine',
-    demoUrl: 'https://erfanjalali.itch.io/vanguard-tactics',
-    imageBanner: 'radial-gradient(135deg, rgba(245, 158, 11, 0.35) 0%, rgba(180, 83, 9, 0.6) 100%)',
-    highlights: [
-      'Developed custom node-based visual ability editor inside Unity Editor GUI',
-      'Implemented robust turn-based undo/redo replay recording stack',
-      'Clean separation between deterministic game rules and presentation view',
-    ],
-  },
-  {
-    id: 'lumina-vr',
-    title: 'Project Lumina: Spatial Optics VR',
-    shortDescription: 'Experimental Virtual Reality puzzle experience built with Unity OpenXR and physical ray optics simulation.',
-    fullDescription: 'A tactile VR experience where players manipulate optical prisms, reflective mirrors, and beam splitters to redirect chromatic laser frequencies across ancient glass temple ruins. Leveraged physics-based hand interactions with grab poses and haptic feedback profiles.',
-    category: 'unity',
-    engine: 'Unity 2022 URP / OpenXR',
-    status: 'Demo',
-    platform: ['Meta Quest 2/3', 'PC VR'],
-    technologies: ['Unity', 'C#', 'OpenXR Toolkit', 'VR Hand Physics', 'Custom Audio'],
-    features: [
-      'Physics-based interaction with dual-handed prism rotation and snapping sockets',
-      'Laser raycasting calculating up to 16 specular reflections and refractions per frame',
-      'Custom haptic impulse curves matching laser focus and puzzle alignment',
-      'Spatial 3D binaural audio cues that resonate based on crystal harmonics',
-      'Comfort-first locomotion options with tunneling vignette shaders',
-    ],
-    githubUrl: 'https://github.com/erfanjalali/lumina-vr-optics',
-    demoUrl: 'https://erfanjalali.itch.io/project-lumina-vr',
-    imageBanner: 'radial-gradient(135deg, rgba(20, 184, 166, 0.4) 0%, rgba(13, 148, 136, 0.6) 100%)',
-    highlights: [
-      'Maintained locked 90 FPS on standalone Meta Quest 2 hardware',
-      'Custom laser vertex shader with animated core pulse and edge caustics',
-      'Showcased at local VR Developer Showcase',
-    ],
-  },
-  {
-    id: 'procedural-terrain',
-    title: 'Voxel Horizon: Procedural World Engine',
-    shortDescription: 'Infinite procedural voxel terrain generation using 3D Simplex noise, Marching Cubes, and the Unity Job System.',
-    fullDescription: 'A technical demo exploring infinite voxel terrain synthesis. Generates chunked 32x32x32 meshes asynchronously across worker threads, calculating smooth normals and biome blending based on temperature and moisture noise maps.',
-    category: 'systems',
-    engine: 'Unity 2022 / C# Jobs',
-    status: 'Completed',
-    platform: ['PC / WebGL'],
-    technologies: ['C#', 'Marching Cubes', 'Simplex Noise', 'Job System', 'Compute Buffer'],
-    features: [
-      'Multi-threaded chunk meshing using Unity NativeArrays and Burst compilation',
-      'Cave system synthesis using 3D Perlin worm sampling',
-      'Triplanar texture mapping shader eliminating UV stretching on vertical cliffs',
-      'Level-of-Detail (LOD) chunk quadtree system with seamless skirt stitching',
-      'Interactive terrain deformation (digging and placing material in real-time)',
-    ],
-    githubUrl: 'https://github.com/erfanjalali/voxel-horizon-generator',
-    demoUrl: 'https://erfanjalali.itch.io/voxel-horizon',
-    imageBanner: 'radial-gradient(135deg, rgba(99, 102, 241, 0.4) 0%, rgba(30, 27, 75, 0.7) 100%)',
-    highlights: [
-      'Generates 16 chunk meshes per frame without hitching main render thread',
-      'Memory footprint capped with a LRU chunk cache ring buffer',
-      'Shared open-source algorithm referenced in community procedural generation tutorials',
-    ],
-  },
+    "releaseDate": "Jun 2021"
+  }
 ];
 
 export const EXPERIENCES_DATA: ExperienceItem[] = [
   {
-    id: 'exp-1',
-    role: 'Lead Gameplay & Systems Programmer',
-    organization: 'Indie Game Studio / Remote',
-    period: '2023 — Present',
-    type: 'Full-Time Contract',
-    description: 'Leading the technical design and gameplay architecture for an unannounced 3D action game in Unity. Responsible for combat systems, custom character controller, physics tuning, and profiling.',
-    achievements: [
-      'Architected a decoupled event bus and state machine reducing gameplay bugs by 40%',
-      'Optimized memory usage and runtime GC spikes to maintain steady 60 FPS on Steam Deck and consoles',
-      'Mentored junior programmers in C# best practices, Git workflows, and profiling tools',
+    "id": "exp-1",
+    "role": "Indie game developer",
+    "organization": "Indie Game Studio ",
+    "period": "2022 — Present",
+    "type": "Full-Time Contract",
+    "description": ".",
+    "achievements": [
+      "Architected a decoupled event bus and state machine reducing gameplay bugs by 40%",
+      "Optimized memory usage and runtime GC spikes to maintain steady 60 FPS on Steam Deck and consoles",
+      "Mentored junior programmers in C# best practices, Git workflows, and profiling tools"
     ],
-    technologies: ['Unity URP', 'C#', 'HLSL', 'FMOD', 'Rider', 'Git LFS'],
-  },
-  {
-    id: 'exp-2',
-    role: 'Game Developer & Graphics Specialist',
-    organization: 'Freelance & Independent Projects',
-    period: '2021 — 2023',
-    type: 'Freelance',
-    description: 'Developed custom gameplay mechanics, shaders, and technical prototypes for indie clients and commercial game studios across PC, Mobile, and WebGL.',
-    achievements: [
-      'Built custom liquid, water, and glass shaders used across 4 commercial client titles',
-      'Implemented mobile touch controls, localization pipelines, and cross-platform UI architectures',
-      'Delivered 6 complete prototypes on time and within strict client performance budgets',
-    ],
-    technologies: ['Unity', 'C#', 'Shader Graph', 'HLSL', 'WebGL', 'Android/iOS'],
-  },
-  {
-    id: 'exp-3',
-    role: 'Game Jam Champion & Core Developer',
-    organization: 'Global Game Jam & Ludum Dare',
-    period: '2020 — Present',
-    type: 'Community & Competitions',
-    description: 'Developed and shipped 8 rapid-iteration game prototypes under strict 48-to-72 hour constraints, frequently ranking in top 5% for gameplay mechanics and artistic polish.',
-    achievements: [
-      'Ranked Top 3% overall out of 2,000+ entries in Ludum Dare for Innovation and Game Feel',
-      'Produced polished WebGL playable builds with zero post-jam hotfixes required',
-      'Built a reusable game-jam template with audio management, tweening, and UI scaffolding',
-    ],
-    technologies: ['Unity', 'C#', 'DOTween', 'ProBuilder', 'Aseprite', 'Itch.io'],
-  },
+    "technologies": [
+      "Unity URP",
+      "C#",
+      "HLSL",
+      "FMOD",
+      "Rider",
+      "Git LFS"
+    ]
+  }
 ];

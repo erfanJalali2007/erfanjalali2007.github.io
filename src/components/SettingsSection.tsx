@@ -57,12 +57,12 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
                 <span className={`relative inline-flex rounded-full h-2 w-2 ${currentTheme.accentClass.dot}`} />
               </span>
               <span className="text-xs uppercase tracking-wider font-semibold text-slate-300/80">
-                Design System & Tokens
+                Theme &amp; Visual Preferences
               </span>
             </div>
-            <h2 className="text-2xl font-light text-white">Appearance & Optics Settings</h2>
+            <h2 className="text-2xl font-light text-white">Appearance &amp; Theme Settings</h2>
             <p className="text-xs sm:text-sm text-slate-400 font-light mt-1">
-              Fine-tune refraction optics, frosted blur depth, fluid caustics, and acoustic feedback.
+              Customize website color themes, background blur depth, ambient lighting, and sound effects.
             </p>
           </div>
 
@@ -72,7 +72,7 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
               onResetDefaults();
               playGlassResonance(440, !settings.soundEnabled);
             }}
-            title="Reset all settings to default tokens"
+            title="Reset all settings to default values"
             className="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white transition-colors border border-white/10 flex items-center gap-1.5 text-xs font-mono"
           >
             <RotateCcw size={13} />
@@ -80,10 +80,10 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
           </button>
         </div>
 
-        {/* Section 1: Liquid Theme Palettes */}
+        {/* Section 1: Color Theme Palettes */}
         <div className="mb-7 pb-6 border-b border-white/10">
           <label className="text-xs uppercase tracking-wider font-mono text-slate-300 block mb-3">
-            1. Liquid Glass Refractive Theme
+            1. Website Color Theme
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
             {Object.values(THEMES).map((theme) => {
@@ -116,7 +116,7 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
                       {theme.name.split(' ')[0]}
                     </div>
                     <div className="text-[10px] text-slate-400 font-light truncate">
-                      {theme.name.split(' ').slice(1).join(' ') || 'Vessel'}
+                      {theme.name.split(' ').slice(1).join(' ') || 'Theme'}
                     </div>
                   </div>
                 </button>
@@ -125,20 +125,20 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
           </div>
         </div>
 
-        {/* Section 2: Frosted Glass Blur & Density */}
+        {/* Section 2: Backdrop Blur & Ambient Lighting */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-7 pb-6 border-b border-white/10">
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="text-xs uppercase tracking-wider font-mono text-slate-300 flex items-center gap-1.5">
                 <Sliders size={13} className={currentTheme.accentClass.icon} />
-                <span>Frosted Blur Depth</span>
+                <span>Background Blur Depth</span>
               </label>
               <span className={`text-xs font-mono ${currentTheme.accentClass.timeText}`}>
                 {settings.blurLevel}px
               </span>
             </div>
             <p className="text-[11px] text-slate-400 mb-3">
-              Controls the physical backdrop blur intensity across all cards and floating modals.
+              Controls the backdrop blur intensity across cards, modals, and navigation dock.
             </p>
             <div className="flex items-center gap-2">
               {[16, 28, 44].map((b) => (
@@ -154,7 +154,7 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
                       : 'bg-white/5 text-slate-400 border-white/10 hover:bg-white/10'
                   }`}
                 >
-                  {b === 16 ? 'Clear (16px)' : b === 28 ? 'Frosted (28px)' : 'Deep (44px)'}
+                  {b === 16 ? 'Subtle (16px)' : b === 28 ? 'Balanced (28px)' : 'Deep (44px)'}
                 </button>
               ))}
             </div>
@@ -164,14 +164,14 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
             <div className="flex items-center justify-between mb-2">
               <label className="text-xs uppercase tracking-wider font-mono text-slate-300 flex items-center gap-1.5">
                 <Droplets size={13} className={currentTheme.accentClass.icon} />
-                <span>Fluid Caustic Glow</span>
+                <span>Ambient Glow Intensity</span>
               </label>
               <span className={`text-xs font-mono ${currentTheme.accentClass.timeText}`}>
                 {Math.round(settings.glowIntensity * 100)}%
               </span>
             </div>
             <p className="text-[11px] text-slate-400 mb-3">
-              Modulates the radiant brightness of the procedural liquid blobs and interactive ripples.
+              Modulates the radiant brightness of background gradient glows and interactive ripples.
             </p>
             <input
               type="range"
@@ -198,9 +198,9 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
                 )}
               </div>
               <div>
-                <h4 className="text-xs font-medium text-white">Acoustic Resonance</h4>
+                <h4 className="text-xs font-medium text-white">Audio Feedback</h4>
                 <p className="text-[11px] text-slate-400 font-light">
-                  Web Audio API glass harmonic chimes
+                  Interactive audio feedback on UI actions
                 </p>
               </div>
             </div>
@@ -228,9 +228,9 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
                 <Activity size={16} className={currentTheme.accentClass.icon} />
               </div>
               <div>
-                <h4 className="text-xs font-medium text-white">Motion Physics</h4>
+                <h4 className="text-xs font-medium text-white">Motion &amp; Animations</h4>
                 <p className="text-[11px] text-slate-400 font-light">
-                  Smooth 3D tilt & fluid animations
+                  Smooth 3D tilt &amp; card transitions
                 </p>
               </div>
             </div>
@@ -255,7 +255,7 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
         <div className="mt-7 pt-6 border-t border-white/10">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs uppercase tracking-wider font-mono text-slate-300">
-              System Architecture & Deployment Telemetry
+              Website Architecture &amp; Infrastructure
             </span>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
               Production Ready

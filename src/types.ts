@@ -42,6 +42,24 @@ export interface RipplePoint {
   opacity: number;
 }
 
+export interface SocialLinkItem {
+  id: string;
+  name: string;
+  url: string;
+  icon: string; // 'Github' | 'Linkedin' | 'Gamepad2' | 'Mail' | 'Twitter' | 'Globe' | 'MessageSquare' | 'Send'
+}
+
+export interface ContactDetails {
+  heading: string;
+  subheading: string;
+  email: string;
+  location: string;
+  responseTime: string;
+  formHeading: string;
+  formSubheading: string;
+  socials: SocialLinkItem[];
+}
+
 export interface ProfileInfo {
   name: string;
   title: string;
@@ -51,7 +69,7 @@ export interface ProfileInfo {
   location: string;
   availability: string;
   stats: { label: string; value: string }[];
-  socials: { name: string; url: string; icon: string }[];
+  socials: SocialLinkItem[];
 }
 
 export interface Project {
@@ -59,16 +77,19 @@ export interface Project {
   title: string;
   shortDescription: string;
   fullDescription: string;
-  category: 'unity' | 'graphics' | 'systems' | 'all';
+  category: 'unity' | 'graphics' | 'systems' | 'other' | 'all' | (string & {});
   engine: string;
-  status: 'Completed' | 'In Development' | 'Prototype' | 'Demo';
+  status: 'Completed' | 'In Development' | 'Prototype' | 'Demo' | 'Early Access' | 'On Hold' | (string & {});
+  releaseDate?: string;
   platform: string[];
   technologies: string[];
   features: string[];
   githubUrl?: string;
   demoUrl?: string;
   videoUrl?: string;
+  youtubeUrl?: string;
   imageBanner: string;
+  galleryImages?: string[];
   highlights?: string[];
 }
 
@@ -134,5 +155,18 @@ export interface GitHubRepo {
   updatedAt: string;
   isFork: boolean;
 }
+
+export type UserRole = 'admin' | 'user';
+
+export interface User {
+  id: string;
+  username: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  avatarUrl?: string;
+  joinedAt: string;
+}
+
 
 

@@ -3,8 +3,8 @@ import { GlassTheme } from '../types';
 export const THEMES: Record<string, GlassTheme> = {
   ruby: {
     id: 'ruby',
-    name: 'Dark Red Glass',
-    badge: 'Crimson Liquid',
+    name: 'Crimson Night',
+    badge: 'Crimson Red',
     backgroundClass: 'bg-[#0d0407]',
     accentClass: {
       ping: 'bg-rose-500',
@@ -34,8 +34,8 @@ export const THEMES: Record<string, GlassTheme> = {
   },
   prismatic: {
     id: 'prismatic',
-    name: 'Prismatic Fluid',
-    badge: 'Iridescent',
+    name: 'Cyber Cyan',
+    badge: 'Electric Neon',
     backgroundClass: 'bg-[#0a0c16]',
     accentClass: {
       ping: 'bg-cyan-400',
@@ -65,8 +65,8 @@ export const THEMES: Record<string, GlassTheme> = {
   },
   clear: {
     id: 'clear',
-    name: 'Crystal Water',
-    badge: 'Ultra Pure',
+    name: 'Arctic Slate',
+    badge: 'Minimal Slate',
     backgroundClass: 'bg-[#07090e]',
     accentClass: {
       ping: 'bg-sky-400',
@@ -96,8 +96,8 @@ export const THEMES: Record<string, GlassTheme> = {
   },
   obsidian: {
     id: 'obsidian',
-    name: 'Smoked Obsidian',
-    badge: 'Dark Caustic',
+    name: 'Deep Obsidian',
+    badge: 'Midnight Dark',
     backgroundClass: 'bg-[#050508]',
     accentClass: {
       ping: 'bg-indigo-400',
@@ -127,8 +127,8 @@ export const THEMES: Record<string, GlassTheme> = {
   },
   amber: {
     id: 'amber',
-    name: 'Liquid Honey',
-    badge: 'Solar Glow',
+    name: 'Warm Amber',
+    badge: 'Warm Solar',
     backgroundClass: 'bg-[#0d0905]',
     accentClass: {
       ping: 'bg-amber-400',

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675">
+  <defs>
+    <linearGradient id="dhBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090503" />
+      <stop offset="50%" stop-color="#1c0f0a" />
+      <stop offset="100%" stop-color="#2d150b" />
+    </linearGradient>
+    <radialGradient id="hexAmbient" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="#b45309" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.8" />
+    </radialGradient>
+    <pattern id="hexGrid" width="60" height="104" patternUnits="userSpaceOnUse" patternTransform="scale(0.8)">
+      <path d="M30,0 L60,17.3 L60,52 L30,69.3 L0,52 L0,17.3 Z M30,104 L60,86.7 L60,52 L30,69.3 L0,52 L0,86.7 Z" fill="none" stroke="#d97706" stroke-width="1" stroke-opacity="0.25" />
+    </pattern>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="1200" height="675" fill="url(#dhBg)" />
+  <rect width="1200" height="675" fill="url(#hexAmbient)" />
+  <rect width="1200" height="675" fill="url(#hexGrid)" />
+
+  <!-- Tactical Vignette & Elevation Highlights -->
+  <g stroke="#f59e0b" stroke-width="2" stroke-opacity="0.6" fill="none">
+    <polygon points="600,220 720,290 720,430 600,500 480,430 480,290" fill="#b45309" fill-opacity="0.2" />
+    <polygon points="600,220 720,290 600,360 480,290" fill="#f59e0b" fill-opacity="0.25" />
+  </g>
+
+  <!-- High Elevation Active Units Overlay -->
+  <circle cx="600" cy="325" r="16" fill="#fbbf24" stroke="#ffffff" stroke-width="3" />
+  <circle cx="600" cy="325" r="32" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="6,4" />
+
+  <!-- Line of Sight Tactical Indicator -->
+  <line x1="600" y1="325" x2="840" y2="240" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="8,6" />
+  <circle cx="840" cy="240" r="12" fill="#ef4444" stroke="#ffffff" stroke-width="2" />
+
+  <!-- Tactical HUD & Information Badges -->
+  <g font-family="monospace" fill="#fef3c7">
+    <rect x="50" y="50" width="340" height="70" rx="14" fill="#000000" fill-opacity="0.6" stroke="#f59e0b" stroke-width="1.5" />
+    <text x="70" y="82" font-size="18" font-weight="bold" fill="#f59e0b" letter-spacing="2">TACTICAL SQUAD // DARK HOUSE</text>
+    <text x="70" y="105" font-size="12" fill="#d1d5db">PROCEDURAL HEX-GRID COMBAT SYSTEM</text>
+    
+    <rect x="50" y="570" width="280" height="55" rx="12" fill="#000000" fill-opacity="0.6" stroke="#78350f" stroke-width="1" />
+    <text x="70" y="595" font-size="11" fill="#fbbf24">STATUS: ACTIVE ENGAGEMENT [TURN 03]</text>
+    <text x="70" y="613" font-size="11" fill="#9ca3af">AP POOL: 4/5 | COVER: 65% [HEAVY]</text>
+  </g>
+</svg>

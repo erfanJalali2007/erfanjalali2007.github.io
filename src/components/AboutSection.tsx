@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { GlassTheme, PortfolioSection } from '../types';
-import { PROFILE_DATA } from '../data/portfolioData';
-import { Gamepad2, Code2, Sparkles, Cpu, Award, ArrowRight, ExternalLink } from 'lucide-react';
+import { usePortfolio } from '../context/PortfolioContext';
+import { Gamepad2, Code2, Sparkles, Cpu, Award, ArrowRight, ExternalLink, Edit2 } from 'lucide-react';
 import { playGlassResonance } from '../utils/audio';
 
 interface AboutSectionProps {
@@ -18,6 +18,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
   isMuted,
   onNavigate,
 }) => {
+  const { profileData, currentUser, setIsAdminEditorOpen, setAdminActiveTab } = usePortfolio();
+
   return (
     <motion.div
       id="about-section-container"
@@ -27,7 +29,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className="relative z-10 w-full max-w-4xl mx-auto px-4 py-8"
     >
-      {/* Main Liquid Glass About Card */}
+      {/* Main Profile About Card */}
       <div
         id="about-card"
         style={{
@@ -58,22 +60,37 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
             </span>
           </div>
 
-          <span className="text-xs px-3 py-1 rounded-full bg-white/10 text-slate-200 font-mono font-medium border border-white/20">
-            {PROFILE_DATA.availability}
-          </span>
+          <div className="flex items-center gap-2">
+            {currentUser?.role === 'admin' && (
+              <button
+                onClick={() => {
+                  setAdminActiveTab('profile');
+                  setIsAdminEditorOpen(true);
+                }}
+                className="px-2.5 py-1 rounded-full bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-mono text-xs font-semibold border border-amber-500/40 flex items-center gap-1 transition-all cursor-pointer"
+                title="ویرایش متون پروفایل"
+              >
+                <Edit2 size={12} />
+                <span>ویرایش ادمین</span>
+              </button>
+            )}
+            <span className="text-xs px-3 py-1 rounded-full bg-white/10 text-slate-200 font-mono font-medium border border-white/20">
+              {profileData.availability}
+            </span>
+          </div>
         </div>
 
         {/* Hero Profile Introduction */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center mb-8">
           <div className="lg:col-span-8">
             <h1 className="text-2xl sm:text-4xl font-semibold tracking-tight text-white mb-2">
-              Hi, I'm <span className="font-semibold text-white">{PROFILE_DATA.name}</span>
+              Hi, I'm <span className="font-semibold text-white">{profileData.name}</span>
             </h1>
             <p className={`text-sm sm:text-base font-mono font-medium ${theme.accentClass.timeText} mb-4 tracking-wide`}>
-              {PROFILE_DATA.title}
+              {profileData.title}
             </p>
             <p className="text-sm sm:text-base text-slate-200 leading-relaxed font-normal mb-4">
-              {PROFILE_DATA.bio}
+              {profileData.bio}
             </p>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
               I believe great games reside at the intersection of mathematical precision and visceral kinetic feedback. Whether writing custom compute passes for fluid caustics, engineering zero-allocation ECS combat loops, or tuning character controllers down to the single-digit millisecond, I focus relentlessly on how games feel in the player's hands.
@@ -82,7 +99,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
 
           {/* Quick Metrics Bento Glass Box */}
           <div className="lg:col-span-4 grid grid-cols-2 gap-3">
-            {PROFILE_DATA.stats.map((stat, idx) => (
+            {profileData.stats.map((stat, idx) => (
               <div
                 key={idx}
                 className="p-3.5 rounded-2xl bg-white/[0.05] border border-white/15 backdrop-blur-md text-center rgb-interactive-option shadow-sm"
@@ -120,7 +137,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
               </h3>
             </div>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-              Crafting custom HLSL shaders, refractive glass materials, water caustics, and VFX Graph particle systems tailored for URP and HDRP.
+              Crafting custom HLSL shaders, realistic surface shaders, atmospheric lighting, and VFX Graph particle systems tailored for URP and HDRP.
             </p>
           </div>
 
@@ -166,10 +183,10 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
 
           <div className="flex items-center gap-2">
             <a
-              href={`mailto:${PROFILE_DATA.email}`}
+              href={`mailto:${profileData.email}`}
               className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white text-xs sm:text-sm font-mono font-medium transition-colors border border-white/15 flex items-center gap-2 rgb-interactive-option"
             >
-              <span>{PROFILE_DATA.email}</span>
+              <span>{profileData.email}</span>
               <ExternalLink size={13} />
             </a>
           </div>

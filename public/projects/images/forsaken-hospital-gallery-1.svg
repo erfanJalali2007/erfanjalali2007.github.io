@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675">
+  <defs>
+    <linearGradient id="hallwayBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#020617" />
+      <stop offset="60%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+    <radialGradient id="lightCone" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.4" />
+      <stop offset="70%" stop-color="#0369a1" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#hallwayBg)" />
+  <rect width="1200" height="675" fill="url(#lightCone)" />
+  
+  <g stroke="#475569" stroke-width="1.5" stroke-opacity="0.4">
+    <line x1="100" y1="100" x2="520" y2="300" />
+    <line x1="100" y1="575" x2="520" y2="375" />
+    <line x1="1100" y1="100" x2="680" y2="300" />
+    <line x1="1100" y1="575" x2="680" y2="375" />
+    <rect x="520" y="300" width="160" height="75" fill="#0f172a" stroke="#38bdf8" stroke-opacity="0.5" />
+  </g>
+
+  <g font-family="monospace" fill="#e2e8f0">
+    <text x="50" y="70" font-size="18" font-weight="bold" fill="#38bdf8">SURGICAL WARD B // VOLUMETRIC FOG</text>
+    <text x="50" y="95" font-size="12" fill="#94a3b8">URP DEFERRED RENDERING • 60 FPS LOCKED</text>
+  </g>
+</svg>

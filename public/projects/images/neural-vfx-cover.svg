@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#02141a" />
+      <stop offset="50%" stop-color="#062e33" />
+      <stop offset="100%" stop-color="#02090f" />
+    </linearGradient>
+    <radialGradient id="particleGlow" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#2dd4bf" stop-opacity="0.45" />
+      <stop offset="50%" stop-color="#0284c7" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)" />
+  <rect width="1200" height="675" fill="url(#particleGlow)" />
+  
+  <g stroke="#2dd4bf" stroke-width="1.2" opacity="0.3">
+    <path d="M 100,400 Q 300,100 600,350 T 1100,200" fill="none" />
+    <path d="M 100,450 Q 400,200 700,400 T 1100,250" fill="none" stroke="#38bdf8" />
+    <path d="M 100,350 Q 500,600 800,300 T 1100,450" fill="none" stroke="#a7f3d0" />
+  </g>
+
+  <g font-family="monospace" fill="#e2e8f0">
+    <text x="60" y="80" font-size="22" font-weight="bold" fill="#2dd4bf" letter-spacing="4">NEURAL SHADER &amp; VOLUMETRIC VFX</text>
+    <text x="60" y="115" font-size="14" fill="#94a3b8">COMPUTE SHADER // GPU INSTANCED PARTICLES (100,000+)</text>
+    <text x="1140" y="80" font-size="14" text-anchor="end" fill="#38bdf8">GPU DISPATCH: DIRECTX 12 / VULKAN</text>
+  </g>
+</svg>

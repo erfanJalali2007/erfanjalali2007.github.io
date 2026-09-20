@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { GlassTheme } from '../types';
-import { SKILL_CATEGORIES } from '../data/portfolioData';
-import { Cpu, Sparkles, Layers, Terminal, CheckCircle2 } from 'lucide-react';
+import { usePortfolio } from '../context/PortfolioContext';
+import { Cpu, Sparkles, Layers, Terminal, CheckCircle2, Edit2 } from 'lucide-react';
 import { playGlassResonance } from '../utils/audio';
+import { getSkillLevelInfo } from '../utils/skills';
 
 interface SkillsSectionProps {
   theme: GlassTheme;
@@ -16,6 +17,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
   blurLevel,
   isMuted,
 }) => {
+  const { skillsData, currentUser, setIsAdminEditorOpen, setAdminActiveTab } = usePortfolio();
   const [activeCategory, setActiveCategory] = useState<string>('all');
 
   const getCategoryIcon = (iconName: string) => {
@@ -33,8 +35,8 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
   };
 
   const filteredCategories = activeCategory === 'all'
-    ? SKILL_CATEGORIES
-    : SKILL_CATEGORIES.filter((c) => c.id === activeCategory);
+    ? skillsData
+    : skillsData.filter((c) => c.id === activeCategory);
 
   return (
     <motion.div
@@ -81,39 +83,55 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
             </p>
           </div>
 
-          {/* Filter Pills */}
-          <div className="flex items-center flex-wrap gap-2 p-1.5 rounded-2xl bg-white/[0.06] border border-white/15">
-            <button
-              id="skill-filter-all"
-              onClick={() => {
-                setActiveCategory('all');
-                playGlassResonance(520, isMuted);
-              }}
-              className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all rgb-interactive-option ${
-                activeCategory === 'all'
-                  ? 'bg-white/25 text-white border border-white/30 shadow-sm'
-                  : 'text-slate-200 hover:text-white hover:bg-white/10'
-              }`}
-            >
-              All Skills
-            </button>
-            {SKILL_CATEGORIES.map((cat) => (
+          {/* Filter Pills & Admin Edit */}
+          <div className="flex items-center flex-wrap gap-2">
+            {currentUser?.role === 'admin' && (
               <button
-                key={cat.id}
-                id={`skill-filter-${cat.id}`}
                 onClick={() => {
-                  setActiveCategory(cat.id);
-                  playGlassResonance(560, isMuted);
+                  setAdminActiveTab('skills');
+                  setIsAdminEditorOpen(true);
                 }}
-                className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap rgb-interactive-option ${
-                  activeCategory === cat.id
+                className="px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-mono text-xs font-semibold border border-amber-500/40 flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                title="ویرایش مهارت‌ها و درصد تسلط"
+              >
+                <Edit2 size={13} />
+                <span>ویرایش مهارت‌ها</span>
+              </button>
+            )}
+
+            <div className="flex items-center flex-wrap gap-2 p-1.5 rounded-2xl bg-white/[0.06] border border-white/15">
+              <button
+                id="skill-filter-all"
+                onClick={() => {
+                  setActiveCategory('all');
+                  playGlassResonance(520, isMuted);
+                }}
+                className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all rgb-interactive-option ${
+                  activeCategory === 'all'
                     ? 'bg-white/25 text-white border border-white/30 shadow-sm'
                     : 'text-slate-200 hover:text-white hover:bg-white/10'
                 }`}
               >
-                {cat.name.split(' ')[0]}
+                All Skills
               </button>
-            ))}
+              {skillsData.map((cat) => (
+                <button
+                  key={cat.id}
+                  id={`skill-filter-${cat.id}`}
+                  onClick={() => {
+                    setActiveCategory(cat.id);
+                    playGlassResonance(560, isMuted);
+                  }}
+                  className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap rgb-interactive-option ${
+                    activeCategory === cat.id
+                      ? 'bg-white/25 text-white border border-white/30 shadow-sm'
+                      : 'text-slate-200 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  {cat.name.split(' ')[0]}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -148,24 +166,30 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
 
               {/* Skill Bars */}
               <div className="space-y-3.5 mt-5">
-                {category.skills.map((skill, sIdx) => (
-                  <div key={sIdx} className="space-y-1.5">
-                    <div className="flex items-center justify-between text-xs sm:text-sm">
-                      <span className="text-slate-100 font-medium flex items-center gap-1.5">
-                        <CheckCircle2 size={14} className={theme.accentClass.icon} />
-                        {skill.name}
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs px-2.5 py-0.5 rounded-md bg-white/10 text-slate-200 font-mono font-medium border border-white/15">
-                          {skill.tag}
+                {category.skills.map((skill, sIdx) => {
+                  const levelInfo = getSkillLevelInfo(skill.level);
+                  const displayTag = skill.tag || levelInfo.tag;
+                  return (
+                    <div key={sIdx} className="space-y-1.5">
+                      <div className="flex items-center justify-between text-xs sm:text-sm">
+                        <span className="text-slate-100 font-medium flex items-center gap-1.5">
+                          <CheckCircle2 size={14} className={theme.accentClass.icon} />
+                          {skill.name}
                         </span>
-                        <span className={`text-xs sm:text-sm font-mono font-semibold ${theme.accentClass.timeText}`}>
-                          {skill.level}%
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`text-xs px-2.5 py-0.5 rounded-md font-mono font-medium border transition-colors ${levelInfo.badgeBg}`}
+                            title={`${displayTag} (${levelInfo.persianLabel}) - ${skill.level}%`}
+                          >
+                            {displayTag}
+                          </span>
+                          <span className={`text-xs sm:text-sm font-mono font-semibold ${theme.accentClass.timeText}`}>
+                            {skill.level}%
+                          </span>
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Specular Liquid Progress Bar */}
+                    {/* Modern Refraction Progress Bar */}
                     <div className="h-2 w-full bg-white/[0.08] rounded-full overflow-hidden p-[1px] border border-white/10">
                       <div
                         className="h-full rounded-full transition-all duration-700 ease-out relative"
@@ -179,7 +203,8 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
                       </div>
                     </div>
                   </div>
-                ))}
+                );
+              })}
               </div>
             </div>
 

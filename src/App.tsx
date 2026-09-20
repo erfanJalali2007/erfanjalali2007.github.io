@@ -11,8 +11,11 @@ import { ExperienceSection } from './components/ExperienceSection';
 import { ContactSection } from './components/ContactSection';
 import { SettingsSection } from './components/SettingsSection';
 import { GlassDock } from './components/GlassDock';
+import { AuthModal } from './components/AuthModal';
+import { AdminEditorModal } from './components/AdminEditorModal';
+import { usePortfolio } from './context/PortfolioContext';
 import { playGlassResonance } from './utils/audio';
-import { Droplet, Clock } from 'lucide-react';
+import { Droplet, Clock, ShieldCheck, User as UserIcon, Sliders, LogIn } from 'lucide-react';
 
 const DEFAULT_SETTINGS: AppearanceSettings = {
   themeId: 'ruby',
@@ -25,6 +28,12 @@ const DEFAULT_SETTINGS: AppearanceSettings = {
 };
 
 export default function App() {
+  const { 
+    currentUser, 
+    setIsAuthModalOpen, 
+    setIsAdminEditorOpen,
+    activeProjectModal,
+  } = usePortfolio();
   const [currentSection, setCurrentSection] = useState<PortfolioSection>('home');
   const [settings, setSettings] = useState<AppearanceSettings>(DEFAULT_SETTINGS);
   const [zenMode, setZenMode] = useState<boolean>(false);
@@ -107,12 +116,13 @@ export default function App() {
     if (zenMode) {
       return (
         <div 
+          key="zen-mode-container"
           onClick={triggerCenterRipple}
           className="cursor-pointer text-center p-8 rounded-3xl bg-white/[0.02] border border-white/10 backdrop-blur-xl glass-specular-border max-w-sm mx-auto my-auto animate-fade-in"
         >
           <Droplet className={`w-8 h-8 ${currentTheme.accentClass.icon} mx-auto mb-3 animate-bounce`} />
           <p className="text-sm font-light text-slate-300">Zen Canvas Active</p>
-          <p className="text-xs text-slate-500 mt-1">Click anywhere to generate fluid caustics</p>
+          <p className="text-xs text-slate-500 mt-1">Click anywhere to trigger interactive ripples</p>
         </div>
       );
     }
@@ -197,7 +207,7 @@ export default function App() {
       onClick={handleGlobalClick}
       className={`relative min-h-screen w-full select-none overflow-x-hidden transition-colors duration-1000 ${currentTheme.backgroundClass} flex flex-col items-center`}
     >
-      {/* Interactive Liquid Caustics & Chromatic Physics Canvas */}
+      {/* Interactive Background Canvas & Chromatic Glow */}
       <LiquidCanvas
         theme={currentTheme}
         pointerPos={pointerPos}
@@ -205,17 +215,21 @@ export default function App() {
         ripplesTrigger={rippleTrigger}
       />
 
-      {/* Top Ambient Branding / Status Pill with Minimal Real-Time Clock */}
-      <header className="fixed top-5 inset-x-0 z-40 flex justify-center pointer-events-none px-4">
+      {/* Top Ambient Branding / Status Pill with Minimal Real-Time Clock & Auth Trigger */}
+      <header className="fixed top-5 inset-x-0 z-40 flex items-center justify-between pointer-events-none px-4 max-w-7xl mx-auto w-full">
+        {/* Left spacing to balance */}
+        <div className="hidden sm:block w-28 pointer-events-none" />
+
+        {/* Center: Status Pill */}
         <div 
           id="status-pill"
-          className="flex items-center gap-2 sm:gap-2.5 px-3 sm:px-4 py-1.5 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur-xl glass-pill-specular text-xs font-mono text-slate-300 shadow-xl"
+          className="flex items-center gap-2 sm:gap-2.5 px-3 sm:px-4 py-1.5 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur-xl glass-pill-specular text-xs font-mono text-slate-300 shadow-xl pointer-events-auto"
         >
           <span className="relative flex h-2 w-2">
             <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${currentTheme.accentClass.ping} opacity-75`} />
             <span className={`relative inline-flex rounded-full h-2 w-2 ${currentTheme.accentClass.dot}`} />
           </span>
-          <span className="font-semibold tracking-wider text-slate-200">LIQUID GLASS</span>
+          <span className="font-semibold tracking-wider text-slate-200">ERFAN JALALI</span>
           <span className="text-white/20">•</span>
           <span className="text-slate-300 font-normal uppercase hidden sm:inline">{currentSection}</span>
           <span className="text-white/20 hidden sm:inline">•</span>
@@ -225,6 +239,56 @@ export default function App() {
               {headerTime}
             </span>
           </div>
+        </div>
+
+        {/* Right: User Login & Role Status Pill */}
+        <div className="pointer-events-auto flex items-center gap-2">
+          {currentUser ? (
+            <div className="flex items-center gap-1.5 p-1 sm:px-3 sm:py-1 rounded-full bg-white/[0.06] border border-white/15 backdrop-blur-xl glass-pill-specular shadow-lg">
+              {currentUser.role === 'admin' ? (
+                <button
+                  onClick={() => setIsAdminEditorOpen(true)}
+                  className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-mono font-semibold border border-amber-500/40 transition-all cursor-pointer"
+                  title="باز کردن پنل مدیریت"
+                >
+                  <Sliders size={12} />
+                  <span className="hidden sm:inline">پنل ادمین</span>
+                </button>
+              ) : (
+                <span className="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 text-xs font-mono border border-blue-500/30 hidden sm:inline">
+                  کاربر
+                </span>
+              )}
+              <button
+                onClick={() => setIsAuthModalOpen(true)}
+                className="flex items-center gap-1.5 text-xs text-slate-200 hover:text-white transition-colors cursor-pointer px-1 py-0.5 rounded-full hover:bg-white/10"
+                title="پروفایل و خروج"
+              >
+                {currentUser.avatarUrl ? (
+                  <img
+                    src={currentUser.avatarUrl}
+                    alt={currentUser.name}
+                    className="w-5 h-5 rounded-full object-cover border border-white/30"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <UserIcon size={14} className="text-slate-300" />
+                )}
+                <span className="font-mono text-xs max-w-[90px] truncate hidden md:inline">
+                  {currentUser.name.split(' ')[0]}
+                </span>
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setIsAuthModalOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white border border-white/20 backdrop-blur-xl glass-pill-specular text-xs font-mono transition-all shadow-lg cursor-pointer"
+              title="ورود کاربر یا ادمین"
+            >
+              <LogIn size={13} className={currentTheme.accentClass.icon} />
+              <span>ورود / ادمین</span>
+            </button>
+          )}
         </div>
       </header>
 
@@ -248,6 +312,19 @@ export default function App() {
         onTriggerRippleCenter={triggerCenterRipple}
         isMuted={isMuted}
         onToggleMute={handleToggleMute}
+        isHidden={!!activeProjectModal}
+      />
+
+      {/* Auth Modal & Admin Content Editor Modal */}
+      <AuthModal
+        theme={currentTheme}
+        blurLevel={settings.blurLevel}
+        isMuted={isMuted}
+      />
+      <AdminEditorModal
+        theme={currentTheme}
+        blurLevel={settings.blurLevel}
+        isMuted={isMuted}
       />
     </div>
   );
