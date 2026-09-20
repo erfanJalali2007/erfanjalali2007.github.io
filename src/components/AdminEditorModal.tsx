@@ -47,6 +47,8 @@ import {
   CheckCheck,
   Server,
   Package,
+  Github,
+  GitBranch,
 } from 'lucide-react';
 import { GlassTheme, Project, SkillCategory, ExperienceItem, SocialLinkItem } from '../types';
 import { usePortfolio, AdminTab } from '../context/PortfolioContext';
@@ -59,6 +61,11 @@ import {
   uploadProjectImageToFolder,
   fetchProjectImagesList,
   ProjectImageFile,
+  testGitHubConnection,
+  syncPortfolioDataToGitHub,
+  getGitHubToken,
+  setGitHubToken,
+  GITHUB_CONFIG,
 } from '../services/storageService';
 
 const GREGORIAN_MONTHS = [
@@ -145,6 +152,13 @@ export const AdminEditorModal: React.FC<AdminEditorModalProps> = ({
   const [isExportingFullProject, setIsExportingFullProject] = useState(false);
   const [fullProjectProgressMsg, setFullProjectProgressMsg] = useState('');
   const [showDirectDownloadHelp, setShowDirectDownloadHelp] = useState(false);
+
+  // GitHub Direct Sync states
+  const [ghToken, setGhToken] = useState(getGitHubToken());
+  const [isSyncingGitHub, setIsSyncingGitHub] = useState(false);
+  const [ghSyncResult, setGhSyncResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [ghTestingConn, setGhTestingConn] = useState(false);
+  const [ghConnStatus, setGhConnStatus] = useState<string | null>(null);
 
   // New experience form toggle
   const [isAddingExperience, setIsAddingExperience] = useState(false);
@@ -427,6 +441,52 @@ export const AdminEditorModal: React.FC<AdminEditorModalProps> = ({
     } finally {
       setIsBaking(false);
     }
+  };
+
+  // Direct GitHub Sync handler
+  const handleDirectGitHubSync = async () => {
+    setIsSyncingGitHub(true);
+    setGhSyncResult(null);
+    try {
+      playGlassResonance(520, isMuted);
+      const res = await syncPortfolioDataToGitHub({
+        profile: profileData,
+        projects: projectsData,
+        skills: skillsData,
+        experiences: experiencesData,
+        contact: contactData,
+      });
+      setGhSyncResult(res);
+      playGlassResonance(res.success ? 750 : 320, isMuted);
+      showNotification(res.message);
+      if (res.success) {
+        refreshImagesList();
+      }
+    } catch (err: any) {
+      setGhSyncResult({ success: false, message: err?.message || 'خطا در ارتباط با گیت‌هاب' });
+    } finally {
+      setIsSyncingGitHub(false);
+    }
+  };
+
+  const handleTestGitHubConn = async () => {
+    setGhTestingConn(true);
+    setGhConnStatus(null);
+    try {
+      const res = await testGitHubConnection(ghToken);
+      setGhConnStatus(res.message);
+      playGlassResonance(res.success ? 650 : 300, isMuted);
+    } catch (e: any) {
+      setGhConnStatus(e?.message || 'خطا در تست اتصال');
+    } finally {
+      setGhTestingConn(false);
+    }
+  };
+
+  const handleSaveGhToken = () => {
+    setGitHubToken(ghToken);
+    showNotification('توکن دسترسی گیت‌هاب با موفقیت ذخیره شد.');
+    playGlassResonance(600, isMuted);
   };
 
   // Download TypeScript source file for offline manual replacement
@@ -2832,6 +2892,92 @@ export const AdminEditorModal: React.FC<AdminEditorModalProps> = ({
             {/* TAB 6: BACKUP & RESTORE */}
             {adminActiveTab === 'backup' && (
               <div className="space-y-5">
+                {/* SECTION 0: GITHUB DIRECT REPO SYNC */}
+                <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-indigo-500/15 via-purple-500/10 to-transparent border border-indigo-500/30 space-y-4">
+                  <div className="flex items-start justify-between flex-wrap gap-3">
+                    <div className="space-y-1 max-w-xl">
+                      <div className="flex items-center gap-2">
+                        <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                          <Github size={20} />
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                            <span>همگام‌سازی مستقیم با ریپازیتوری گیت‌هاب (GitHub Direct Sync)</span>
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                              {GITHUB_CONFIG.OWNER}/{GITHUB_CONFIG.REPO}
+                            </span>
+                          </h4>
+                          <p className="text-xs text-slate-300 mt-0.5">
+                            تمامی تغییرات متن‌ها، لینک‌ها و تصاویر آپلودشده مستقیماً به ریپازیتوری گیت‌هاب کامیت شده و گیت‌هاب اکشنز به صورت خودکار نسخه جدید سایت را مستقر می‌کند.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={handleDirectGitHubSync}
+                        disabled={isSyncingGitHub}
+                        className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-xs font-bold flex items-center gap-2 transition-all shadow-lg shadow-indigo-950/50 cursor-pointer"
+                        title="ارسال مستقیم تمام تغییرات و تصاویر به ریپازیتوری گیت‌هاب"
+                      >
+                        {isSyncingGitHub ? <Loader2 size={15} className="animate-spin" /> : <GitBranch size={15} />}
+                        <span>{isSyncingGitHub ? 'در حال ارسال کامیت به گیت‌هاب...' : 'ارسال مستقیم و همگام‌سازی با گیت‌هاب'}</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Token configuration & status */}
+                  <div className="p-3 rounded-xl bg-black/40 border border-white/10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 text-xs">
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <span className="text-slate-400 font-mono whitespace-nowrap">کلید دسترسی (PAT):</span>
+                      <input
+                        type="password"
+                        value={ghToken}
+                        onChange={(e) => setGhToken(e.target.value)}
+                        placeholder="ghp_..."
+                        className="flex-1 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-white/15 text-white font-mono text-xs focus:outline-none focus:border-indigo-400"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleSaveGhToken}
+                        className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-semibold cursor-pointer transition-colors"
+                      >
+                        ذخیره
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleTestGitHubConn}
+                        disabled={ghTestingConn}
+                        className="px-3 py-1.5 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 border border-indigo-500/30 text-xs font-semibold cursor-pointer transition-colors flex items-center gap-1"
+                      >
+                        {ghTestingConn && <Loader2 size={12} className="animate-spin" />}
+                        <span>تست اتصال</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {ghConnStatus && (
+                    <div className="p-2.5 rounded-xl bg-indigo-950/40 border border-indigo-500/30 text-xs text-indigo-200 font-mono">
+                      {ghConnStatus}
+                    </div>
+                  )}
+
+                  {ghSyncResult && (
+                    <div className={`p-3 rounded-xl border text-xs flex items-center justify-between gap-3 ${
+                      ghSyncResult.success
+                        ? 'bg-emerald-950/60 border-emerald-500/40 text-emerald-200'
+                        : 'bg-rose-950/60 border-rose-500/40 text-rose-200'
+                    }`}>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 size={16} className={ghSyncResult.success ? 'text-emerald-400' : 'text-rose-400'} />
+                        <span>{ghSyncResult.message}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 {/* SECTION 1: PERMANENT STORAGE & BUILD PORTABILITY */}
                 <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-emerald-500/10 via-cyan-500/5 to-transparent border border-emerald-500/25 space-y-4">
                   <div className="flex items-start justify-between flex-wrap gap-3">

@@ -53,7 +53,6 @@ interface PortfolioContextType {
   // Auth
   currentUser: User | null;
   login: (username: string, password: string) => { success: boolean; message: string };
-  quickLogin: (role: UserRole) => void;
   register: (username: string, name: string, email: string, password: string) => { success: boolean; message: string };
   logout: () => void;
   isAuthModalOpen: boolean;
@@ -375,20 +374,6 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     };
     setCurrentUser(authenticatedUser);
     return { success: true, message: `خوش آمدید، ${account.name}!` };
-  };
-
-  const quickLogin = (role: UserRole) => {
-    const targetAccount = accounts.find((a) => a.role === role) || DEFAULT_ACCOUNTS.find((a) => a.role === role)!;
-    const authenticatedUser: User = {
-      id: targetAccount.id,
-      username: targetAccount.username,
-      name: targetAccount.name,
-      email: targetAccount.email,
-      role: targetAccount.role,
-      avatarUrl: targetAccount.avatarUrl,
-      joinedAt: targetAccount.joinedAt,
-    };
-    setCurrentUser(authenticatedUser);
   };
 
   const register = (
@@ -893,7 +878,6 @@ export const EXPERIENCES_DATA: ExperienceItem[] = ${JSON.stringify(experiencesDa
       value={{
         currentUser,
         login,
-        quickLogin,
         register,
         logout,
         isAuthModalOpen,

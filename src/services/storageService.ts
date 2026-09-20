@@ -37,28 +37,217 @@ function readFileAsDataURL(file: File): Promise<string> {
   });
 }
 
+export const GITHUB_CONFIG = {
+  OWNER: 'erfanJalali2007',
+  REPO: 'erfanjalali2007.github.io',
+  BRANCH: 'main',
+  STORAGE_KEY: 'portfolio_github_token',
+  DEFAULT_TOKEN: '',
+};
+
+export function getGitHubToken(): string {
+  try {
+    const saved = localStorage.getItem(GITHUB_CONFIG.STORAGE_KEY);
+    if (saved && saved.trim()) return saved.trim();
+  } catch {}
+  return GITHUB_CONFIG.DEFAULT_TOKEN;
+}
+
+export function setGitHubToken(token: string): void {
+  try {
+    localStorage.setItem(GITHUB_CONFIG.STORAGE_KEY, token.trim());
+  } catch {}
+}
+
+export function utf8ToBase64(str: string): string {
+  const bytes = new TextEncoder().encode(str);
+  let binary = '';
+  for (let i = 0; i < bytes.byteLength; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+}
+
 /**
- * Uploads an image file to the dedicated /public/projects/images/ directory
- * via the backend server, preserving 100% original quality, resolution, and file size.
+ * Tests connection to the GitHub repository using the provided or saved token.
+ */
+export async function testGitHubConnection(token?: string): Promise<{ success: boolean; message: string; username?: string }> {
+  const ghToken = token || getGitHubToken();
+  if (!ghToken) {
+    return { success: false, message: 'توکن دسترسی گیت‌هاب یافت نشد.' };
+  }
+
+  try {
+    const res = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.OWNER}/${GITHUB_CONFIG.REPO}`, {
+      headers: {
+        Authorization: `token ${ghToken}`,
+        Accept: 'application/vnd.github.v3+json',
+      },
+    });
+
+    if (res.ok) {
+      const repo = await res.json();
+      return {
+        success: true,
+        message: `اتصال برقرار است: مخزن ${repo.full_name} (${repo.default_branch})`,
+        username: repo.owner?.login,
+      };
+    } else {
+      const err = await res.json().catch(() => ({}));
+      return {
+        success: false,
+        message: err.message || `خطا در برقراری ارتباط با گیت‌هاب (${res.status})`,
+      };
+    }
+  } catch (e: any) {
+    return {
+      success: false,
+      message: e?.message || 'خطای شبکه در اتصال به گیت‌هاب.',
+    };
+  }
+}
+
+/**
+ * Commits a file directly to the GitHub repository via GitHub REST API.
+ */
+export async function commitFileToGitHub(
+  filePath: string,
+  contentBase64: string,
+  commitMessage: string,
+  token?: string
+): Promise<{ success: boolean; message: string; sha?: string; htmlUrl?: string }> {
+  const ghToken = token || getGitHubToken();
+  if (!ghToken) {
+    return { success: false, message: 'توکن دسترسی گیت‌هاب تنظیم نشده است.' };
+  }
+
+  const cleanPath = filePath.replace(/^\/+/, '');
+  const apiUrl = `https://api.github.com/repos/${GITHUB_CONFIG.OWNER}/${GITHUB_CONFIG.REPO}/contents/${cleanPath}`;
+
+  try {
+    // 1. Check if file already exists to get its SHA
+    let existingSha: string | undefined;
+    try {
+      const getRes = await fetch(`${apiUrl}?ref=${GITHUB_CONFIG.BRANCH}`, {
+        headers: {
+          Authorization: `token ${ghToken}`,
+          Accept: 'application/vnd.github.v3+json',
+        },
+      });
+      if (getRes.ok) {
+        const fileData = await getRes.json();
+        existingSha = fileData.sha;
+      }
+    } catch {
+      // New file
+    }
+
+    // 2. Put file to repository
+    const putRes = await fetch(apiUrl, {
+      method: 'PUT',
+      headers: {
+        Authorization: `token ${ghToken}`,
+        Accept: 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message: commitMessage,
+        content: contentBase64,
+        sha: existingSha,
+        branch: GITHUB_CONFIG.BRANCH,
+      }),
+    });
+
+    if (putRes.ok) {
+      const result = await putRes.json();
+      return {
+        success: true,
+        message: 'فایل با موفقیت در گیت‌هاب ثبت شد.',
+        sha: result.commit?.sha,
+        htmlUrl: result.commit?.html_url,
+      };
+    } else {
+      const err = await putRes.json().catch(() => ({}));
+      return {
+        success: false,
+        message: err.message || `خطا در ارسال به گیت‌هاب (${putRes.status})`,
+      };
+    }
+  } catch (err: any) {
+    return {
+      success: false,
+      message: err.message || 'خطای ارتباط با سرور گیت‌هاب.',
+    };
+  }
+}
+
+/**
+ * Uploads an image file directly to GitHub repo (/public/projects/images/...)
+ * with 100% binary fidelity, triggering automatic deploy on GitHub Pages.
+ */
+export async function uploadImageToGitHub(
+  file: File,
+  projectId?: string,
+  onProgress?: (msg: string) => void
+): Promise<string> {
+  onProgress?.('در حال آماده‌سازی تصویر برای ارسال به گیت‌هاب...');
+
+  const token = getGitHubToken();
+  if (!token) {
+    throw new Error('توکن گیت‌هاب موجود نیست.');
+  }
+
+  let base64Data: string;
+  if (file.size <= 30 * 1024 * 1024) {
+    base64Data = await readFileAsDataURL(file);
+  } else {
+    onProgress?.('در حال بهینه‌سازی حجم تصویر...');
+    base64Data = await optimizeImageFile(file, 2560, 1440, 0.92);
+  }
+
+  const cleanBase64 = base64Data.replace(/^data:[^;]+;base64,/, '');
+  const cleanExt = (file.name.split('.').pop() || 'png').toLowerCase();
+  const safeBase = (projectId || 'project').replace(/[^a-zA-Z0-9_-]/g, '-');
+  const filename = `${safeBase}-${Date.now()}.${cleanExt}`;
+  const targetPath = `public/projects/images/${filename}`;
+
+  onProgress?.(`در حال آپلود و کامیت مستقیم تصویر ${filename} در گیت‌هاب...`);
+  const commitRes = await commitFileToGitHub(
+    targetPath,
+    cleanBase64,
+    `Add project image: ${filename} via Admin Panel`,
+    token
+  );
+
+  if (commitRes.success) {
+    onProgress?.('تصویر با موفقیت در ریپازیتوری ذخیره شد!');
+    return `/projects/images/${filename}`;
+  } else {
+    throw new Error(commitRes.message);
+  }
+}
+
+/**
+ * Uploads an image file to the dedicated /public/projects/images/ directory.
+ * Prioritizes direct GitHub commit so changes are permanently preserved in the repo.
  */
 export async function uploadProjectImageToFolder(
   file: File,
   projectId?: string,
   onProgress?: (msg: string) => void
 ): Promise<string> {
-  onProgress?.('در حال بارگذاری فایل تصویر با کیفیت و وضوح اصلی...');
-
-  let imageDataUrl: string;
-  // If file is under 30MB, preserve 100% original binary data without downscaling
-  if (file.size <= 30 * 1024 * 1024) {
-    imageDataUrl = await readFileAsDataURL(file);
-  } else {
-    onProgress?.('تصویر بسیار حجیم است، در حال تنظیم بهینه...');
-    imageDataUrl = await optimizeImageFile(file, 2560, 1440, 0.92);
+  // 1. Try direct GitHub commit first
+  try {
+    const ghUrl = await uploadImageToGitHub(file, projectId, onProgress);
+    if (ghUrl) return ghUrl;
+  } catch (ghErr: any) {
+    console.warn('[StorageService] GitHub direct upload failed, falling back to local server:', ghErr);
   }
 
-  onProgress?.('در حال ذخیره در پوشه اختصاصی پروژه (/public/projects/images/)...');
+  // 2. Fallback to local server endpoint if running local dev server
+  onProgress?.('در حال بارگذاری فایل تصویر در سرور محلی...');
   try {
+    let imageDataUrl = await readFileAsDataURL(file);
     const res = await fetch('/api/upload-image', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -71,29 +260,102 @@ export async function uploadProjectImageToFolder(
 
     if (res.ok) {
       const data = await res.json();
-      if (data.url) {
-        return data.url;
-      }
-    } else {
-      const err = await res.json().catch(() => ({}));
-      console.warn('[StorageService] Upload returned error:', err);
+      if (data.url) return data.url;
     }
   } catch (err) {
-    console.warn('[StorageService] Server upload endpoint not reachable, using direct data URL fallback:', err);
+    console.warn('[StorageService] Local server endpoint not reachable, using direct data URL fallback:', err);
   }
 
-  // Fallback: return the data URL so work is never blocked
-  return imageDataUrl;
+  // 3. Ultimate fallback: return data URL so UI never blocks
+  return await readFileAsDataURL(file);
+}
+
+/**
+ * Synchronizes all portfolio data directly into the GitHub repository
+ * (public/data/portfolioData.json & src/data/portfolioData.ts).
+ */
+export async function syncPortfolioDataToGitHub(
+  data: PortfolioFullData,
+  onProgress?: (msg: string) => void
+): Promise<SyncResult> {
+  const token = getGitHubToken();
+  if (!token) {
+    return {
+      success: false,
+      message: 'توکن دسترسی گیت‌هاب یافت نشد. لطفاً در بخش تنظیمات توکن را بررسی نمایید.',
+    };
+  }
+
+  try {
+    onProgress?.('در حال آماده‌سازی ساختار داده‌های JSON پورتفولیو...');
+    const jsonString = JSON.stringify(data, null, 2);
+    const jsonBase64 = utf8ToBase64(jsonString);
+
+    onProgress?.('در حال کامیت فایل public/data/portfolioData.json در گیت‌هاب...');
+    const jsonCommit = await commitFileToGitHub(
+      'public/data/portfolioData.json',
+      jsonBase64,
+      'Update portfolioData.json from Admin Studio',
+      token
+    );
+
+    if (!jsonCommit.success) {
+      return {
+        success: false,
+        message: `خطا در ذخیره JSON در گیت‌هاب: ${jsonCommit.message}`,
+      };
+    }
+
+    // Also update TypeScript source file
+    onProgress?.('در حال کامیت فایل src/data/portfolioData.ts در گیت‌هاب...');
+    const tsCode = `// THIS FILE IS AUTOMATICALLY SYNCHRONIZED WITH YOUR PORTFOLIO SETTINGS & ASSETS
+// Any changes saved in the Admin Studio are permanently baked into this file and /public/projects/images/
+
+import { Project, SkillCategory, ExperienceItem, ProfileInfo, ContactDetails } from '../types';
+
+export const PROFILE_DATA: ProfileInfo = ${JSON.stringify(data.profile, null, 2)};
+
+export const DEFAULT_CONTACT_DETAILS: ContactDetails = ${JSON.stringify(data.contact, null, 2)};
+
+export const SKILL_CATEGORIES: SkillCategory[] = ${JSON.stringify(data.skills, null, 2)};
+
+export const PROJECTS_DATA: Project[] = ${JSON.stringify(data.projects, null, 2)};
+
+export const EXPERIENCES_DATA: ExperienceItem[] = ${JSON.stringify(data.experiences, null, 2)};
+`;
+    const tsBase64 = utf8ToBase64(tsCode);
+    await commitFileToGitHub(
+      'src/data/portfolioData.ts',
+      tsBase64,
+      'Update portfolioData.ts from Admin Studio',
+      token
+    );
+
+    onProgress?.('تغییرات با موفقیت در گیت‌هاب ثبت شدند!');
+    return {
+      success: true,
+      message: 'تغییرات مستقیماً در ریپازیتوری گیت‌هاب ثبت شدند و سایت در حال بیلد و انتشار خودکار است!',
+      filesUpdated: ['public/data/portfolioData.json', 'src/data/portfolioData.ts'],
+    };
+  } catch (err: any) {
+    return {
+      success: false,
+      message: err.message || 'خطا در همگام‌سازی با گیت‌هاب.',
+    };
+  }
 }
 
 /**
  * Synchronizes and bakes all portfolio settings, texts, and projects permanently
  * into /public/data/portfolioData.json and /src/data/portfolioData.ts.
- * Automatically extracts any base64 images into physical files in /public/projects/images/.
+ * Supports both local server persistence and direct GitHub repository synchronization.
  */
 export async function syncPortfolioDataToServer(
-  data: PortfolioFullData
+  data: PortfolioFullData,
+  onProgress?: (msg: string) => void
 ): Promise<SyncResult> {
+  // 1. Try local dev server if running locally
+  let localResult: SyncResult | null = null;
   try {
     const res = await fetch('/api/save-portfolio-data', {
       method: 'POST',
@@ -102,27 +364,30 @@ export async function syncPortfolioDataToServer(
     });
 
     if (res.ok) {
-      const result = await res.json();
-      return {
-        success: true,
-        message: result.message || 'داده‌ها و تصاویر با موفقیت در فایل‌های پروژه ذخیره شدند.',
-        filesUpdated: result.filesUpdated,
-        sanitizedProfile: result.sanitizedProfile,
-        sanitizedProjects: result.sanitizedProjects,
-      };
-    } else {
-      const err = await res.json().catch(() => ({}));
-      return {
-        success: false,
-        message: err.details || err.error || 'خطا در برقراری ارتباط با سرور ذخیره‌سازی.',
-      };
+      localResult = await res.json();
     }
-  } catch (err: any) {
+  } catch {
+    // Local server not running (e.g. running on GitHub Pages)
+  }
+
+  // 2. Direct GitHub repository sync
+  const ghResult = await syncPortfolioDataToGitHub(data, onProgress);
+  if (ghResult.success) {
+    return ghResult;
+  }
+
+  // If GitHub sync failed but local succeeded
+  if (localResult && localResult.success) {
     return {
-      success: false,
-      message: 'سرور در دسترس نیست، اما تغییرات در حافظه مرورگر ذخیره گردید.',
+      success: true,
+      message: 'داده‌ها در فایل‌های محلی ذخیره شدند. (برای همگام‌سازی ابری توکن گیت‌هاب را بررسی کنید)',
     };
   }
+
+  return {
+    success: false,
+    message: ghResult.message || 'تغییرات در حافظه مرورگر ذخیره گردید.',
+  };
 }
 
 /**

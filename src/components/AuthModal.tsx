@@ -4,7 +4,6 @@ import {
   X,
   ShieldCheck,
   User as UserIcon,
-  Crown,
   KeyRound,
   LogIn,
   LogOut,
@@ -32,7 +31,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const {
     currentUser,
     login,
-    quickLogin,
     register,
     logout,
     isAuthModalOpen,
@@ -271,62 +269,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               </div>
             </div>
           ) : (
-            /* Login & Quick Access Form */
+            /* Login & Register Form */
             <div className="space-y-6">
-              {/* Quick 1-Click Access Buttons */}
-              <div>
-                <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-300 block mb-2.5">
-                  دسترسی سریع و تست یک‌کلیکه (Quick Login)
-                </span>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  <button
-                    onClick={() => {
-                      quickLogin('admin');
-                      playGlassResonance(650, isMuted);
-                    }}
-                    className="p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/20 to-rose-500/20 hover:from-amber-500/30 hover:to-rose-500/30 border border-amber-500/40 text-white text-left transition-all flex items-center gap-3 shadow-sm cursor-pointer group rgb-interactive-option"
-                  >
-                    <div className="p-2 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300 shrink-0">
-                      <Crown size={18} />
-                    </div>
-                    <div>
-                      <div className="text-xs sm:text-sm font-semibold flex items-center gap-1.5 text-white">
-                        <span>ورود به عنوان ادمین</span>
-                      </div>
-                      <div className="text-[11px] text-amber-200/90 font-medium">
-                        دسترسی کامل ویرایش متون و بخش‌ها
-                      </div>
-                    </div>
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      quickLogin('user');
-                      playGlassResonance(550, isMuted);
-                    }}
-                    className="p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/10 border border-white/15 text-white text-left transition-all flex items-center gap-3 shadow-sm cursor-pointer group rgb-interactive-option"
-                  >
-                    <div className="p-2 rounded-xl bg-white/10 border border-white/20 text-slate-200 shrink-0">
-                      <UserIcon size={18} />
-                    </div>
-                    <div>
-                      <div className="text-xs sm:text-sm font-semibold text-white">
-                        ورود به عنوان کاربر عادی
-                      </div>
-                      <div className="text-[11px] text-slate-300 font-medium">
-                        دسترسی استاندارد و بازدید
-                      </div>
-                    </div>
-                  </button>
-                </div>
-              </div>
-
-              {/* Separator Divider */}
-              <div className="flex items-center gap-3">
-                <div className="h-[1px] flex-1 bg-white/10" />
-                <span className="text-[11px] font-mono text-slate-400">یا ورود دستی با نام کاربری</span>
-                <div className="h-[1px] flex-1 bg-white/10" />
-              </div>
 
               {/* Tabs: Sign In / Register */}
               <div className="flex rounded-xl bg-black/30 p-1 border border-white/10">
