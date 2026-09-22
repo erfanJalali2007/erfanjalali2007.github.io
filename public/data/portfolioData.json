@@ -91,63 +91,68 @@
       ],
       "githubUrl": "https://github.com/erfanJalali2007/Forsaken-Hospital-Prototype",
       "demoUrl": "",
-      "imageBanner": "/projects/images/forsaken-hospital-1789926132977-0919-1-2.png",
+      "imageBanner": "/projects/images/project-1790066540583-0919-1-2--meisa.png",
       "highlights": [
         "Modular architecture enabling rapid horror game mechanics authoring",
         "Zero-allocation raycasting and event delegates avoiding GC stutter",
         "Custom Unity Editor tools for rapid level designer workflow"
       ],
       "galleryImages": [
-        "/projects/images/forsaken-hospital-1789926132977-0919-1-2.png",
-        "/projects/images/forsaken-hospital-1789928671888-0919-1-4.png",
-        "/projects/images/forsaken-hospital-gallery-2.png",
-        "/projects/images/forsaken-hospital-1789929696163-0919-1-1.png",
-        "/projects/images/forsaken-hospital-1789931052843-0919-1-5.png",
-        "/projects/images/forsaken-hospital-1789931209878-0919-1-3.png",
-        "/projects/images/forsaken-hospital-1789931517081-0919-1-6.png"
+        "/projects/images/project-1790066540583-0919-1-2--meisa.png",
+        "/projects/images/project-1790066540637-0919-1-4--poyzp.png",
+        "/projects/images/project-1790066540643-0919-1-5--r4bns.png",
+        "/projects/images/project-1790066540663-0919-1-6--117ev.png",
+        "/projects/images/project-1790066540705-0919-1--1ebib.png",
+        "/projects/images/project-1790066540613-0919-1-3--2ko6c.png",
+        "/projects/images/project-1790066620096-0919-1-1--gl4gj.png"
       ],
       "releaseDate": "Sep 2026"
     },
     {
       "id": "vanguard-tactics",
       "title": "Dark House",
-      "shortDescription": "Turn-based squad tactical RPG with procedural hex battlefields, cover systems, and modular ability card synergy.",
-      "fullDescription": "An isometric tactical combat prototype featuring procedural grid generation with elevation differentials, Line-of-Sight (LOS) Raycast queries, and dynamic cover bonuses. Features a modular skill scripting architecture where gameplay effects are defined as composable ScriptableObjects.",
+      "shortDescription": "Atmospheric psychological survival horror prototype with dynamic lighting, spatial audio, and stealth AI mechanics.",
+      "fullDescription": "An atmospheric survival horror  hide and seek exploration experience built with Unity ‌Built in . Features dynamic ray-traced shadows, interactive puzzle locks,  and reactive enemy AI driven by behavior trees and acoustic stimulus detection.",
       "category": "unity",
-      "engine": "Unity 2022.3 LTS",
+      "engine": "Unity (URP) & C#",
       "status": "Completed",
       "platform": [
         "Mobile (Android / iOS)",
-        "Android",
-        "iOS"
+        "iOS",
+        "Android"
       ],
       "technologies": [
         "Unity",
         "C#",
-        "ScriptableObjects",
-        "Hex Math",
-        "DoTween",
+        "Volumetric Lighting",
+        "Behavior Trees",
+        "Spatial Audio",
         "Cinemachine"
       ],
       "features": [
-        "Hexagonal grid coordinates with Dijkstra path-cost computation and hazard penalties",
-        "Volumetric Line-of-Sight calculation with partial and full cover mitigation",
-        "Action-point (AP) economy with reaction overwatch triggers",
-        "Modular Card/Ability system serializable into JSON save states",
-        "Custom inspector node-graph tool for editing ability dependencies"
+        "Dynamic room-to-room occlusion culling and atmospheric volumetric fog",
+        "Auditory detection system where player footsteps and noises trigger enemy investigations",
+        "Modular lockpicking and mechanical puzzle solver with tactile interaction",
+        "Cinematic camera transitions and adaptive ambient soundscapes"
       ],
-      "githubUrl": "https://github.com/erfanjalali/vanguard-tactics-engine",
-      "demoUrl": "https://erfanjalali.itch.io/vanguard-tactics",
-      "imageBanner": "/projects/images/dark-house-cover.svg",
+      "githubUrl": "",
+      "demoUrl": "",
+      "imageBanner": "/projects/images/project-1790066750168-loading-bar-iur85.png",
       "highlights": [
-        "Developed custom node-based visual ability editor inside Unity Editor GUI",
-        "Implemented robust turn-based undo/redo replay recording stack",
-        "Clean separation between deterministic game rules and presentation view"
+        "Bespoke horror sound design paired with 3D audio spatialization",
+        "Highly responsive first-person character controller with physical collision",
+        "Optimized post-processing stack maintaining steady 60+ FPS"
       ],
-      "releaseDate": "Jun 2021",
       "galleryImages": [
-        "/projects/images/dark-house-cover.svg"
-      ]
+        "/projects/images/project-1790066750168-loading-bar-iur85.png",
+        "/projects/images/project-1790066750177-myket-ss2-ohmd5.png",
+        "/projects/images/project-1790066750183-screenshot-2025-08-13-151411-rhxbd.png",
+        "/projects/images/project-1790066750196-screenshot-2025-09-30-143918-pxqi2.png",
+        "/projects/images/project-1790066750199-screenshot-2025-10-01-024417-3uarz.png",
+        "/projects/images/project-1790066797331-screenshot-2025-08-16-131108-au18b.png",
+        "/projects/images/project-1790066797340-screenshot-2025-09-30-143444-3k3q4.png"
+      ],
+      "releaseDate": "May 2024"
     }
   ],
   "skills": [
@@ -316,5 +321,5 @@
       }
     ]
   },
-  "savedAt": "2026-09-20T19:28:37.458Z"
+  "savedAt": "2026-09-22T09:30:07.165Z"
 }
