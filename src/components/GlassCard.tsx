@@ -137,11 +137,11 @@ export const GlassCard: React.FC<GlassCardProps> = ({
         }}
         className="relative rounded-3xl p-6 sm:p-8 lg:p-9 transition-transform duration-150 ease-out cursor-pointer glass-specular-border overflow-hidden select-none group rgb-interactive-card shadow-2xl"
       >
-        {/* Dynamic Optical Glare & Specular Reflection Layer */}
+        {/* Dynamic Optical Glare & Specular Reflection Layer matching Theme Palette */}
         <div
-          className="absolute inset-0 pointer-events-none opacity-35 group-hover:opacity-60 transition-opacity duration-500 mix-blend-overlay"
+          className="absolute inset-0 pointer-events-none opacity-40 group-hover:opacity-75 transition-opacity duration-500 mix-blend-screen"
           style={{
-            background: `radial-gradient(circle 500px at ${tilt.glareX}% ${tilt.glareY}%, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.08) 45%, transparent 70%)`,
+            background: `radial-gradient(circle 520px at ${tilt.glareX}% ${tilt.glareY}%, rgba(${theme.pointerAura.primaryRgb}, 0.5) 0%, rgba(${theme.pointerAura.secondaryRgb}, 0.22) 36%, rgba(${theme.pointerAura.highlightRgb}, 0.05) 60%, transparent 75%)`,
           }}
         />
 

@@ -9,6 +9,33 @@ export interface ProjectImageFile {
   updatedAt: string;
 }
 
+export interface ProjectExportStats {
+  totalBytes: number;
+  formattedTotal: string;
+  imageBytes: number;
+  formattedImages: string;
+  imageCount: number;
+  codeBytes: number;
+  formattedCode: string;
+  fileCount: number;
+  timestamp: string;
+}
+
+/**
+ * Fetches real-time computed size and asset counts for the complete project export
+ */
+export async function fetchProjectExportStats(): Promise<ProjectExportStats | null> {
+  try {
+    const res = await fetch(`/api/export-stats?t=${Date.now()}`);
+    if (res.ok) {
+      return (await res.json()) as ProjectExportStats;
+    }
+  } catch (err) {
+    console.warn('[StorageService] Error fetching export stats:', err);
+  }
+  return null;
+}
+
 export interface PortfolioFullData {
   profile: ProfileInfo;
   projects: Project[];
@@ -229,25 +256,18 @@ export async function uploadImageToGitHub(
 
 /**
  * Uploads an image file to the dedicated /public/projects/images/ directory.
- * Prioritizes direct GitHub commit so changes are permanently preserved in the repo.
+ * Prioritizes local physical server storage directly into /public/projects/images/,
+ * with optional asynchronous GitHub repository mirror if a token is present.
  */
 export async function uploadProjectImageToFolder(
   file: File,
   projectId?: string,
   onProgress?: (msg: string) => void
 ): Promise<string> {
-  // 1. Try direct GitHub commit first
+  // 1. Prioritize local server endpoint to immediately save physical file to /public/projects/images/
+  onProgress?.('در حال بارگذاری و ذخیره فیزیکی تصویر در پوشه public/projects/images/...');
   try {
-    const ghUrl = await uploadImageToGitHub(file, projectId, onProgress);
-    if (ghUrl) return ghUrl;
-  } catch (ghErr: any) {
-    console.warn('[StorageService] GitHub direct upload failed, falling back to local server:', ghErr);
-  }
-
-  // 2. Fallback to local server endpoint if running local dev server
-  onProgress?.('در حال بارگذاری فایل تصویر در سرور محلی...');
-  try {
-    let imageDataUrl = await readFileAsDataURL(file);
+    const imageDataUrl = await readFileAsDataURL(file);
     const res = await fetch('/api/upload-image', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -260,10 +280,28 @@ export async function uploadProjectImageToFolder(
 
     if (res.ok) {
       const data = await res.json();
-      if (data.url) return data.url;
+      if (data.url) {
+        // If GitHub token is present, mirror to GitHub asynchronously in background
+        if (getGitHubToken()) {
+          uploadImageToGitHub(file, projectId).catch((ghErr) => {
+            console.warn('[StorageService] Non-blocking GitHub mirror:', ghErr);
+          });
+        }
+        return data.url;
+      }
     }
   } catch (err) {
-    console.warn('[StorageService] Local server endpoint not reachable, using direct data URL fallback:', err);
+    console.warn('[StorageService] Local upload-image endpoint failed, attempting fallback:', err);
+  }
+
+  // 2. Direct GitHub commit fallback if GitHub token is present
+  if (getGitHubToken()) {
+    try {
+      const ghUrl = await uploadImageToGitHub(file, projectId, onProgress);
+      if (ghUrl) return ghUrl;
+    } catch (ghErr: any) {
+      console.warn('[StorageService] GitHub direct upload failed:', ghErr);
+    }
   }
 
   // 3. Ultimate fallback: return data URL so UI never blocks
@@ -354,8 +392,7 @@ export async function syncPortfolioDataToServer(
   data: PortfolioFullData,
   onProgress?: (msg: string) => void
 ): Promise<SyncResult> {
-  // 1. Try local dev server if running locally
-  let localResult: SyncResult | null = null;
+  // 1. Try local dev server first
   try {
     const res = await fetch('/api/save-portfolio-data', {
       method: 'POST',
@@ -364,29 +401,34 @@ export async function syncPortfolioDataToServer(
     });
 
     if (res.ok) {
-      localResult = await res.json();
+      const localResult: SyncResult = await res.json();
+      // If GitHub token is present, mirror to GitHub asynchronously
+      if (getGitHubToken()) {
+        syncPortfolioDataToGitHub(data, onProgress).catch((e) => {
+          console.warn('[GitHub Mirror] Non-blocking GitHub mirror error:', e);
+        });
+      }
+      return {
+        ...localResult,
+        success: true,
+        message: localResult.message || 'داده‌ها با موفقیت در پوشه‌ها و فایل‌های اصلی پروژه ذخیره شدند.',
+      };
     }
-  } catch {
-    // Local server not running (e.g. running on GitHub Pages)
+  } catch (err) {
+    console.warn('[StorageService] Local server save failed:', err);
   }
 
-  // 2. Direct GitHub repository sync
-  const ghResult = await syncPortfolioDataToGitHub(data, onProgress);
-  if (ghResult.success) {
-    return ghResult;
-  }
-
-  // If GitHub sync failed but local succeeded
-  if (localResult && localResult.success) {
-    return {
-      success: true,
-      message: 'داده‌ها در فایل‌های محلی ذخیره شدند. (برای همگام‌سازی ابری توکن گیت‌هاب را بررسی کنید)',
-    };
+  // 2. Direct GitHub repository sync if token available
+  if (getGitHubToken()) {
+    const ghResult = await syncPortfolioDataToGitHub(data, onProgress);
+    if (ghResult.success) {
+      return ghResult;
+    }
   }
 
   return {
     success: false,
-    message: ghResult.message || 'تغییرات در حافظه مرورگر ذخیره گردید.',
+    message: 'خطا در ارتباط با سرور برای ثبت دائمی داده‌ها.',
   };
 }
 

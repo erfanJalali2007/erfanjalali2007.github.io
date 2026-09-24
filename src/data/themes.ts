@@ -113,8 +113,8 @@ export const THEMES: Record<string, GlassTheme> = {
     },
     cardStyles: {
       background: 'rgba(15, 23, 42, 0.4)',
-      border: 'rgba(255, 255, 255, 0.12)',
-      highlight: 'rgba(255, 255, 255, 0.25)',
+      border: 'rgba(129, 140, 248, 0.18)',
+      highlight: 'rgba(168, 85, 247, 0.45)',
       textColor: 'text-slate-200',
       subtextColor: 'text-slate-500',
     },

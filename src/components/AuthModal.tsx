@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   AlertCircle,
   Sparkles,
+  Crown,
 } from 'lucide-react';
 import { GlassTheme } from '../types';
 import { usePortfolio } from '../context/PortfolioContext';

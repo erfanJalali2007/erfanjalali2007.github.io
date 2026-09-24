@@ -18,7 +18,7 @@ import { playGlassResonance } from './utils/audio';
 import { Droplet, Clock, ShieldCheck, User as UserIcon, Sliders, LogIn } from 'lucide-react';
 
 const DEFAULT_SETTINGS: AppearanceSettings = {
-  themeId: 'ruby',
+  themeId: 'obsidian',
   blurLevel: 28,
   glassOpacity: 0.05,
   borderOpacity: 0.22,
@@ -41,7 +41,7 @@ export default function App() {
   const [rippleTrigger, setRippleTrigger] = useState<{ x: number; y: number; timestamp: number } | null>(null);
   const [headerTime, setHeaderTime] = useState<string>('');
 
-  const currentTheme = THEMES[settings.themeId] || THEMES.ruby;
+  const currentTheme = THEMES[settings.themeId] || THEMES.obsidian;
   const isMuted = !settings.soundEnabled;
 
   // Real-time minimal clock for the header status pill

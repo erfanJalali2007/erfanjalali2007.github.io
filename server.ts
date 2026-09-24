@@ -469,9 +469,123 @@ export const EXPERIENCES_DATA: ExperienceItem[] = ${JSON.stringify(payload.exper
     }
   });
 
-  // Direct high-performance server-side ZIP export of the COMPLETE ready-to-run project source code
-  app.get('/api/export-full-project', async (req, res) => {
+  // Helper function to format byte sizes into readable string
+  function formatByteSize(bytes: number, decimals = 1): string {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+
+  // Live calculator for total project export size and asset breakdown
+  function computeProjectExportStats() {
+    const excludeDirs = new Set(['node_modules', '.git', 'dist', '.aistudio', '.cache', 'tmp', '.system_generated']);
+    let totalBytes = 0;
+    let imageBytes = 0;
+    let codeBytes = 0;
+    let fileCount = 0;
+    let imageCount = 0;
+
+    const traverse = (currentDir: string) => {
+      try {
+        const entries = fs.readdirSync(currentDir, { withFileTypes: true });
+        for (const entry of entries) {
+          if (excludeDirs.has(entry.name)) continue;
+          if (entry.name.startsWith('.') && entry.name !== '.env.example' && entry.name !== '.github') continue;
+
+          const fullPath = path.join(currentDir, entry.name);
+          if (entry.isDirectory()) {
+            traverse(fullPath);
+          } else if (entry.isFile()) {
+            fileCount++;
+            const stat = fs.statSync(fullPath);
+            const size = stat.size;
+            totalBytes += size;
+            if (fullPath.includes(path.join('public', 'projects', 'images'))) {
+              imageCount++;
+              imageBytes += size;
+            } else {
+              codeBytes += size;
+            }
+          }
+        }
+      } catch (e) {
+        // ignore unreadable
+      }
+    };
+
+    traverse(process.cwd());
+
+    return {
+      totalBytes,
+      formattedTotal: formatByteSize(totalBytes),
+      imageBytes,
+      formattedImages: formatByteSize(imageBytes),
+      imageCount,
+      codeBytes,
+      formattedCode: formatByteSize(codeBytes),
+      fileCount,
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  // Real-time API endpoint returning live bundle size and asset counts
+  app.get('/api/export-stats', (req, res) => {
     try {
+      const stats = computeProjectExportStats();
+      return res.json(stats);
+    } catch (err: any) {
+      console.error('[Export Stats API] Error computing export stats:', err);
+      res.status(500).json({ error: 'Failed to compute export stats', details: err?.message });
+    }
+  });
+
+  // Direct high-performance server-side ZIP export of the COMPLETE ready-to-run project source code
+  // Supports both GET (stream direct) and POST (bakes latest changes into files before zipping)
+  app.all('/api/export-full-project', async (req, res) => {
+    try {
+      // If POST with latest state payload was passed, bake everything directly into source files first!
+      if (req.method === 'POST' && req.body && req.body.profile) {
+        try {
+          const { profile, projects, skills, experiences, contact } = req.body;
+          const sanitizedProfile = { ...profile };
+          if (sanitizedProfile.avatarUrl && sanitizedProfile.avatarUrl.startsWith('data:image/')) {
+            sanitizedProfile.avatarUrl = persistBase64Image(sanitizedProfile.avatarUrl, 'profile', 'avatar');
+          }
+          let activeProjects = Array.isArray(projects) ? projects : [];
+          const sanitizedProjects = activeProjects.map((proj: any, pIdx: number) => {
+            const pId = proj.id || `project-${pIdx + 1}`;
+            const updated = { ...proj };
+            if (updated.imageBanner && updated.imageBanner.startsWith('data:image/')) {
+              updated.imageBanner = persistBase64Image(updated.imageBanner, pId, 'cover');
+            }
+            if (Array.isArray(updated.galleryImages)) {
+              updated.galleryImages = updated.galleryImages.map((img: string, gIdx: number) => {
+                if (img && typeof img === 'string' && img.startsWith('data:image/')) {
+                  return persistBase64Image(img, pId, `gallery-${gIdx + 1}`);
+                }
+                return img;
+              });
+            }
+            return updated;
+          });
+
+          persistPortfolioDataFiles({
+            profile: sanitizedProfile,
+            projects: sanitizedProjects,
+            skills,
+            experiences,
+            contact,
+            savedAt: new Date().toISOString(),
+          });
+          console.log('[Export Full Project] Automatically baked latest changes prior to creating ZIP');
+        } catch (bakeErr) {
+          console.warn('[Export Full Project] Pre-sync warning:', bakeErr);
+        }
+      }
+
       const zip = new JSZip();
       const excludeDirs = new Set(['node_modules', '.git', 'dist', '.aistudio', '.cache', 'tmp', '.system_generated']);
 
@@ -520,7 +634,7 @@ npm run build
         const entries = fs.readdirSync(currentDir, { withFileTypes: true });
         for (const entry of entries) {
           if (excludeDirs.has(entry.name)) continue;
-          if (entry.name.startsWith('.') && entry.name !== '.env.example') continue;
+          if (entry.name.startsWith('.') && entry.name !== '.env.example' && entry.name !== '.github') continue;
 
           const fullPath = path.join(currentDir, entry.name);
           if (entry.isDirectory()) {

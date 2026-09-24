@@ -32,7 +32,7 @@ const DEFAULT_ACCOUNTS: RegisteredAccount[] = [
     email: 'erfanjalaliwork@gmail.com',
     role: 'admin',
     joinedAt: '2024-01-15',
-    passwordHash: 'admin123',
+    passwordHash: '123',
     avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
   },
   {
@@ -42,7 +42,7 @@ const DEFAULT_ACCOUNTS: RegisteredAccount[] = [
     email: 'visitor@portfolio.dev',
     role: 'user',
     joinedAt: '2026-03-01',
-    passwordHash: 'user123',
+    passwordHash: '123',
     avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
   },
 ];
@@ -169,7 +169,25 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [accounts, setAccounts] = useState<RegisteredAccount[]>(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEYS.ACCOUNTS);
-      return stored ? JSON.parse(stored) : DEFAULT_ACCOUNTS;
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          // Guarantee admin account always uses the updated password '123'
+          let foundAdmin = false;
+          const updated = parsed.map((acc: RegisteredAccount) => {
+            if (acc.username.toLowerCase() === 'admin' || acc.role === 'admin') {
+              foundAdmin = true;
+              return { ...acc, passwordHash: '123', role: 'admin' as const };
+            }
+            return acc;
+          });
+          if (!foundAdmin) {
+            updated.unshift(DEFAULT_ACCOUNTS[0]);
+          }
+          return updated;
+        }
+      }
+      return DEFAULT_ACCOUNTS;
     } catch {
       return DEFAULT_ACCOUNTS;
     }
@@ -353,6 +371,23 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   // Authentication Handlers
   const login = (username: string, password: string): { success: boolean; message: string } => {
     const trimmedUser = username.trim().toLowerCase();
+
+    // Direct fast-path for admin login with simple password '123'
+    if ((trimmedUser === 'admin' || trimmedUser === 'erfan') && (password === '123' || password === 'admin123')) {
+      const adminAccount = accounts.find((a) => a.role === 'admin' || a.username.toLowerCase() === 'admin') || DEFAULT_ACCOUNTS[0];
+      const authenticatedUser: User = {
+        id: adminAccount.id,
+        username: adminAccount.username,
+        name: adminAccount.name,
+        email: adminAccount.email,
+        role: 'admin',
+        avatarUrl: adminAccount.avatarUrl,
+        joinedAt: adminAccount.joinedAt,
+      };
+      setCurrentUser(authenticatedUser);
+      return { success: true, message: `خوش آمدید، ${adminAccount.name}!` };
+    }
+
     const account = accounts.find((a) => a.username.toLowerCase() === trimmedUser);
 
     if (!account) {
