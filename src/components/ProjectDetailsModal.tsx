@@ -134,11 +134,11 @@ export const ProjectDetailsModal: React.FC<ProjectDetailsModalProps> = ({
           }}
           className="relative w-full max-w-4xl h-[92vh] max-h-[92vh] rounded-3xl glass-specular-border shadow-2xl flex flex-col overflow-hidden"
         >
-          {/* Prismatic Top Edge Refraction Line */}
+          {/* Prismatic Top Edge Refraction Line matching Theme Aura */}
           <div
             className="absolute top-0 left-0 right-0 h-[1.5px] opacity-80 pointer-events-none z-20"
             style={{
-              background: `linear-gradient(90deg, transparent 0%, ${theme.cardStyles.highlight} 45%, rgba(255,255,255,0.9) 50%, ${theme.cardStyles.highlight} 55%, transparent 100%)`,
+              background: `linear-gradient(90deg, transparent 0%, ${theme.cardStyles.highlight} 45%, rgba(${theme.pointerAura.highlightRgb}, 0.95) 50%, ${theme.cardStyles.highlight} 55%, transparent 100%)`,
             }}
           />
 

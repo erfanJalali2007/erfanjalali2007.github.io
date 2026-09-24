@@ -145,11 +145,11 @@ export const GlassCard: React.FC<GlassCardProps> = ({
           }}
         />
 
-        {/* Prismatic Top Edge Refraction Line */}
+        {/* Prismatic Top Edge Refraction Line matching Theme Aura */}
         <div
           className="absolute top-0 left-0 right-0 h-[1.5px] opacity-70 pointer-events-none"
           style={{
-            background: `linear-gradient(90deg, transparent 0%, ${theme.cardStyles.highlight} 40%, rgba(255,255,255,0.9) 50%, ${theme.cardStyles.highlight} 60%, transparent 100%)`,
+            background: `linear-gradient(90deg, transparent 0%, ${theme.cardStyles.highlight} 40%, rgba(${theme.pointerAura.highlightRgb}, 0.95) 50%, ${theme.cardStyles.highlight} 60%, transparent 100%)`,
             transform: `translateX(${(tilt.glareX - 50) * 0.4}%)`,
             transition: 'transform 0.1s ease-out',
           }}

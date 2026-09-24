@@ -287,6 +287,38 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     safeStorageSet(STORAGE_KEYS.CONTACT, contactData);
   }, [contactData]);
 
+  // Hydrate from canonical /data/portfolioData.json on mount so server updates & images reflect immediately
+  useEffect(() => {
+    fetch('/data/portfolioData.json')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((serverData) => {
+        if (!serverData) return;
+        if (Array.isArray(serverData.projects) && serverData.projects.length > 0) {
+          setProjectsData(serverData.projects);
+          safeStorageSet(STORAGE_KEYS.PROJECTS, serverData.projects);
+        }
+        if (serverData.profile) {
+          setProfileData(serverData.profile);
+          safeStorageSet(STORAGE_KEYS.PROFILE, serverData.profile);
+        }
+        if (Array.isArray(serverData.skills) && serverData.skills.length > 0) {
+          setSkillsData(serverData.skills);
+          safeStorageSet(STORAGE_KEYS.SKILLS, serverData.skills);
+        }
+        if (Array.isArray(serverData.experiences) && serverData.experiences.length > 0) {
+          setExperiencesData(serverData.experiences);
+          safeStorageSet(STORAGE_KEYS.EXPERIENCES, serverData.experiences);
+        }
+        if (serverData.contact) {
+          setContactData(serverData.contact);
+          safeStorageSet(STORAGE_KEYS.CONTACT, serverData.contact);
+        }
+      })
+      .catch((err) => {
+        console.warn('[PortfolioContext] Non-blocking initial data hydration note:', err);
+      });
+  }, []);
+
   // Automatically persist any base64 images from browser storage into physical files on disk
   useEffect(() => {
     const hasBase64Images = projectsData.some(

@@ -15,7 +15,7 @@ import { AuthModal } from './components/AuthModal';
 import { AdminEditorModal } from './components/AdminEditorModal';
 import { usePortfolio } from './context/PortfolioContext';
 import { playGlassResonance } from './utils/audio';
-import { Droplet, Clock, ShieldCheck, User as UserIcon, Sliders, LogIn } from 'lucide-react';
+import { Droplet, Clock, ShieldCheck, User as UserIcon, Sliders, LogIn, Download } from 'lucide-react';
 
 const DEFAULT_SETTINGS: AppearanceSettings = {
   themeId: 'obsidian',
@@ -32,6 +32,7 @@ export default function App() {
     currentUser, 
     setIsAuthModalOpen, 
     setIsAdminEditorOpen,
+    setAdminActiveTab,
     activeProjectModal,
   } = usePortfolio();
   const [currentSection, setCurrentSection] = useState<PortfolioSection>('home');
@@ -205,6 +206,11 @@ export default function App() {
     <div
       id="liquid-root-container"
       onClick={handleGlobalClick}
+      style={{
+        '--theme-primary-rgb': currentTheme.pointerAura.primaryRgb,
+        '--theme-secondary-rgb': currentTheme.pointerAura.secondaryRgb,
+        '--theme-highlight-rgb': currentTheme.pointerAura.highlightRgb,
+      } as React.CSSProperties}
       className={`relative min-h-screen w-full select-none overflow-x-hidden transition-colors duration-1000 ${currentTheme.backgroundClass} flex flex-col items-center`}
     >
       {/* Interactive Background Canvas & Chromatic Glow */}
@@ -246,14 +252,27 @@ export default function App() {
           {currentUser ? (
             <div className="flex items-center gap-1.5 p-1 sm:px-3 sm:py-1 rounded-full bg-white/[0.06] border border-white/15 backdrop-blur-xl glass-pill-specular shadow-lg">
               {currentUser.role === 'admin' ? (
-                <button
-                  onClick={() => setIsAdminEditorOpen(true)}
-                  className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-mono font-semibold border border-amber-500/40 transition-all cursor-pointer"
-                  title="باز کردن پنل مدیریت"
-                >
-                  <Sliders size={12} />
-                  <span className="hidden sm:inline">پنل ادمین</span>
-                </button>
+                <>
+                  <button
+                    onClick={() => {
+                      setAdminActiveTab('backup');
+                      setIsAdminEditorOpen(true);
+                    }}
+                    className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs font-mono font-semibold border border-emerald-500/40 transition-all cursor-pointer shadow-sm"
+                    title="دانلود بسته کامل ۶۵ مگابایتی پروژه و تمام تصاویر"
+                  >
+                    <Download size={11} className="text-emerald-400" />
+                    <span className="hidden sm:inline">دانلود (۶۵ MB)</span>
+                  </button>
+                  <button
+                    onClick={() => setIsAdminEditorOpen(true)}
+                    className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-mono font-semibold border border-amber-500/40 transition-all cursor-pointer"
+                    title="باز کردن پنل مدیریت"
+                  >
+                    <Sliders size={12} />
+                    <span className="hidden sm:inline">پنل ادمین</span>
+                  </button>
+                </>
               ) : (
                 <span className="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 text-xs font-mono border border-blue-500/30 hidden sm:inline">
                   کاربر

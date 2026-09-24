@@ -449,23 +449,55 @@ export const EXPERIENCES_DATA: ExperienceItem[] = ${JSON.stringify(payload.exper
         }
       }
 
-      const zipBuffer = await zip.generateAsync({
-        type: 'nodebuffer',
-        compression: 'DEFLATE',
-        compressionOptions: { level: 1 },
-      });
-
       const today = new Date().toISOString().slice(0, 10);
       res.setHeader('Content-Type', 'application/zip');
       res.setHeader('Content-Disposition', `attachment; filename="erfan-jalali-portfolio-assets-${today}.zip"`);
-      res.setHeader('Content-Length', zipBuffer.length.toString());
       res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
       res.setHeader('Pragma', 'no-cache');
       res.setHeader('Expires', '0');
-      return res.send(zipBuffer);
+
+      const stream = zip.generateNodeStream({ type: 'nodebuffer', streamFiles: true });
+      stream.pipe(res);
     } catch (err: any) {
       console.error('[Export ZIP API] Error generating zip archive:', err);
       res.status(500).json({ error: 'Failed to generate ZIP archive', details: err?.message });
+    }
+  });
+
+  // API endpoint returning all project source code text files (excluding node_modules and images)
+  // Used by client-side robust packager to bundle the full project offline in browser without proxy limits
+  app.get('/api/project-source-files', (req, res) => {
+    try {
+      const excludeDirs = new Set(['node_modules', '.git', 'dist', '.aistudio', '.cache', 'tmp', '.system_generated']);
+      const filesMap: Record<string, string> = {};
+
+      const traverse = (currentDir: string, relativeDir = '') => {
+        const entries = fs.readdirSync(currentDir, { withFileTypes: true });
+        for (const entry of entries) {
+          if (excludeDirs.has(entry.name)) continue;
+          if (entry.name.startsWith('.') && entry.name !== '.env.example' && entry.name !== '.github') continue;
+
+          const fullPath = path.join(currentDir, entry.name);
+          const relPath = relativeDir ? `${relativeDir}/${entry.name}` : entry.name;
+
+          if (entry.isDirectory()) {
+            if (relPath === 'public/projects/images') continue;
+            traverse(fullPath, relPath);
+          } else if (entry.isFile()) {
+            const ext = path.extname(entry.name).toLowerCase();
+            const textExts = ['.ts', '.tsx', '.js', '.jsx', '.json', '.html', '.css', '.md', '.example', '.yml', '.yaml', '.svg'];
+            if (textExts.includes(ext) || entry.name === 'bun.lock') {
+              filesMap[relPath] = fs.readFileSync(fullPath, 'utf-8');
+            }
+          }
+        }
+      };
+
+      traverse(process.cwd());
+      return res.json({ success: true, files: filesMap });
+    } catch (err: any) {
+      console.error('[Project Source Files API] Error:', err);
+      res.status(500).json({ error: 'Failed to retrieve source files', details: err?.message });
     }
   });
 
@@ -653,20 +685,15 @@ npm run build
 
       addDirectoryToZip(process.cwd(), zip);
 
-      const zipBuffer = await zip.generateAsync({
-        type: 'nodebuffer',
-        compression: 'DEFLATE',
-        compressionOptions: { level: 1 },
-      });
-
       const today = new Date().toISOString().slice(0, 10);
       res.setHeader('Content-Type', 'application/zip');
       res.setHeader('Content-Disposition', `attachment; filename="erfan-jalali-portfolio-full-project-${today}.zip"`);
-      res.setHeader('Content-Length', zipBuffer.length.toString());
       res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
       res.setHeader('Pragma', 'no-cache');
       res.setHeader('Expires', '0');
-      return res.send(zipBuffer);
+
+      const stream = zip.generateNodeStream({ type: 'nodebuffer', streamFiles: true });
+      stream.pipe(res);
     } catch (err: any) {
       console.error('[Export Full Project API] Error generating full project zip:', err);
       res.status(500).json({ error: 'Failed to generate full project ZIP archive', details: err?.message });

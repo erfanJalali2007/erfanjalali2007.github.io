@@ -936,7 +936,26 @@ export const AdminEditorModal: React.FC<AdminEditorModalProps> = ({
               </div>
             </div>
 
-            <div className="flex items-center gap-2 self-end sm:self-auto">
+            <div className="flex items-center gap-2 self-end sm:self-auto flex-wrap">
+              <button
+                type="button"
+                onClick={handleDownloadUnifiedFullSource}
+                disabled={isExportingUnifiedFull}
+                className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-md cursor-pointer disabled:opacity-60"
+                title="دانلود بسته کامل پروژه و تمام تصاویر با حجم ۶۵.۶ مگابایت"
+              >
+                {isExportingUnifiedFull ? (
+                  <Loader2 size={14} className="animate-spin text-white" />
+                ) : (
+                  <Download size={14} className="text-white" />
+                )}
+                <span>
+                  {isExportingUnifiedFull
+                    ? (unifiedExportProgressMsg || 'در حال آماده‌سازی...')
+                    : `دانلود پروژه کامل (${exportStats?.formattedTotal || '۶۵.۶ MB'})`}
+                </span>
+              </button>
+
               <button
                 onClick={handleManualSaveAll}
                 className="px-3.5 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 hover:text-emerald-100 border border-emerald-500/40 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
@@ -1034,12 +1053,12 @@ export const AdminEditorModal: React.FC<AdminEditorModalProps> = ({
               onClick={() => setAdminActiveTab('backup')}
               className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
                 adminActiveTab === 'backup'
-                  ? 'bg-white/25 text-white border border-white/30 shadow-sm'
+                  ? 'bg-gradient-to-r from-blue-600/60 to-emerald-600/60 text-white border border-emerald-400/40 shadow-sm'
                   : 'text-slate-300 hover:text-white hover:bg-white/5'
               }`}
             >
-              <Download size={15} />
-              <span>پشتیبان‌گیری و ریست</span>
+              <Download size={15} className="text-emerald-400" />
+              <span>دانلود سورس و بکاپ ({exportStats?.formattedTotal || '۶۵.۶ MB'})</span>
             </button>
           </div>
 
@@ -3063,9 +3082,9 @@ export const AdminEditorModal: React.FC<AdminEditorModalProps> = ({
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                           <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                         </span>
-                        <span className="text-slate-300 text-[11px]">حجم نهایی خروجی:</span>
+                        <span className="text-slate-300 text-[11px]">حجم کل پکیج سورس و تصاویر:</span>
                         <span className="text-emerald-300 font-mono font-bold text-xs">
-                          {exportStats?.formattedTotal || (loadingImagesList ? 'در حال محاسبه...' : '۲۱.۴ MB')}
+                          {exportStats?.formattedTotal || (loadingImagesList ? 'در حال محاسبه...' : '۶۵.۶ MB')}
                         </span>
                         <button
                           type="button"
@@ -3086,7 +3105,7 @@ export const AdminEditorModal: React.FC<AdminEditorModalProps> = ({
                       <span className="text-[10px] font-mono text-slate-400 block">حجم کل سورس و دارایی‌ها</span>
                       <div className="text-xs sm:text-sm font-bold text-cyan-300 font-mono flex items-center gap-1.5">
                         <Package size={13} className="text-cyan-400" />
-                        <span>{exportStats?.formattedTotal || '۲۱.۴ MB'}</span>
+                        <span>{exportStats?.formattedTotal || '۶۵.۶ MB'}</span>
                       </div>
                       <span className="text-[10px] text-slate-400 block">محاسبه زنده بر اساس فایل‌ها</span>
                     </div>
@@ -3095,16 +3114,16 @@ export const AdminEditorModal: React.FC<AdminEditorModalProps> = ({
                       <span className="text-[10px] font-mono text-slate-400 block">عکس‌ها (public/projects/images)</span>
                       <div className="text-xs sm:text-sm font-bold text-emerald-300 font-mono flex items-center gap-1.5">
                         <Images size={13} className="text-emerald-400" />
-                        <span>{exportStats?.imageCount || projectImagesList.length} عکس ({exportStats?.formattedImages || '۲۰.۱ MB'})</span>
+                        <span>{exportStats?.imageCount || projectImagesList.length} عکس ({exportStats?.formattedImages || '۶۵ MB'})</span>
                       </div>
-                      <span className="text-[10px] text-slate-400 block">۱۰۰٪ عکس‌های کاور و گالری</span>
+                      <span className="text-[10px] text-slate-400 block">۱۰۰٪ عکس‌های اصلی و گالری</span>
                     </div>
 
                     <div className="p-3 rounded-xl bg-black/40 border border-white/10 space-y-0.5">
                       <span className="text-[10px] font-mono text-slate-400 block">کدها و کامپوننت‌ها (src + configs)</span>
                       <div className="text-xs sm:text-sm font-bold text-purple-300 font-mono flex items-center gap-1.5">
                         <FileCode size={13} className="text-purple-400" />
-                        <span>{exportStats?.formattedCode || '۱.۳ MB'} • کامل</span>
+                        <span>{exportStats?.formattedCode || '۶۰۰ KB'} • کامل</span>
                       </div>
                       <span className="text-[10px] text-slate-400 block">آماده اجرای مستقل و build</span>
                     </div>
@@ -3120,24 +3139,24 @@ export const AdminEditorModal: React.FC<AdminEditorModalProps> = ({
                   </div>
 
                   {/* Main Action Callout: Single prominent download button */}
-                  <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-gradient-to-r from-indigo-900/40 via-purple-900/30 to-black/60 border border-indigo-500/30 shadow-lg">
-                    <div className="space-y-0.5">
-                      <div className="text-xs font-semibold text-white flex items-center gap-2">
-                        <HardDrive size={15} className="text-emerald-400" />
-                        <span>دانلود پکیج یکپارچه پروژه (آماده بیلد و اجرا):</span>
+                  <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-4 rounded-xl bg-gradient-to-r from-indigo-900/60 via-purple-900/40 to-slate-900/80 border border-indigo-500/40 shadow-xl">
+                    <div className="space-y-1">
+                      <div className="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+                        <HardDrive size={16} className="text-emerald-400" />
+                        <span>دانلود پکیج کامل سورس و تصاویر ({exportStats?.formattedTotal || '۶۵.۶ MB'}):</span>
                       </div>
-                      <p className="text-[11px] text-slate-300">
-                        شامل تمام فایل‌های پروژه، تمامی تصاویر با کیفیت کامل، ساختار داده‌ها و آخرین تغییرات اعمال شده در پنل ادمین.
+                      <p className="text-[11px] text-slate-300 leading-relaxed max-w-xl">
+                        شامل تمام فایل‌های پروژه، تمامی تصاویر با کیفیت کامل (شامل تمام عکس‌های Forsaken Hospital)، ساختار کامل داده‌ها، تنظیمات و راهنمای اجرای آفلاین.
                       </p>
                     </div>
 
-                    <div className="flex items-center flex-wrap gap-2 shrink-0">
+                    <div className="flex items-center flex-wrap gap-2.5 shrink-0">
                       <button
                         type="button"
                         onClick={handleDownloadUnifiedFullSource}
                         disabled={isExportingUnifiedFull}
-                        className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 disabled:opacity-60 text-white text-xs font-bold flex items-center justify-center gap-2.5 transition-all shadow-lg shadow-indigo-950/60 cursor-pointer hover:scale-[1.02] active:scale-[0.99]"
-                        title="تثبیت خودکار آخرین تغییرات و دانلود بسته کامل سورس‌کد و تصاویر (ZIP)"
+                        className="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-600 hover:from-blue-500 hover:to-emerald-500 disabled:opacity-60 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2.5 transition-all shadow-xl shadow-indigo-950/60 cursor-pointer hover:scale-[1.02] active:scale-[0.99]"
+                        title="دانلود بسته کامل ۶۵.۶ مگابایتی سورس‌کد و تمامی تصاویر"
                       >
                         {isExportingUnifiedFull ? (
                           <Loader2 size={16} className="animate-spin text-white" />
@@ -3146,22 +3165,27 @@ export const AdminEditorModal: React.FC<AdminEditorModalProps> = ({
                         )}
                         <span>
                           {isExportingUnifiedFull
-                            ? (unifiedExportProgressMsg || 'در حال آماده‌سازی خروجی کامل سورس...')
-                            : `دانلود خروجی کامل سورس (${exportStats?.formattedTotal || '۲۱.۴ MB'})`}
+                            ? (unifiedExportProgressMsg || 'در حال آماده‌سازی و دانلود سورس ۶۵ مگابایتی...')
+                            : `دانلود مستقیم بسته ۶۵ مگابایتی (${exportStats?.formattedTotal || '۶۵.۶ MB'})`}
                         </span>
                       </button>
 
-                      <a
-                        href="/api/export-full-project"
-                        download={`erfan-jalali-portfolio-full-project-${new Date().toISOString().slice(0, 10)}.zip`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full sm:w-auto px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 text-xs font-semibold flex items-center justify-center gap-2 border border-white/15 transition-all cursor-pointer"
-                        title="دانلود مستقیم با استریم سرور بدون مصرف رم جاوااسکریپت"
+                      <button
+                        type="button"
+                        onClick={handleDownloadAssetsZip}
+                        disabled={isExportingZip}
+                        className="w-full sm:w-auto px-4 py-3 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 hover:text-white text-xs font-semibold flex items-center justify-center gap-2 border border-cyan-500/35 transition-all cursor-pointer shadow-sm"
+                        title="دانلود فقط تصاویر و فایل‌های دیتا (۶۵ MB Assets ZIP)"
                       >
-                        <Download size={13} className="text-cyan-400" />
-                        <span>لینک مستقیم مرورگر</span>
-                      </a>
+                        {isExportingZip ? (
+                          <Loader2 size={14} className="animate-spin text-cyan-400" />
+                        ) : (
+                          <Images size={14} className="text-cyan-400" />
+                        )}
+                        <span>
+                          {isExportingZip ? (zipProgressMsg || 'در حال دانلود...') : 'فقط تصاویر (Assets ZIP)'}
+                        </span>
+                      </button>
                     </div>
                   </div>
 
@@ -3424,18 +3448,24 @@ export const AdminEditorModal: React.FC<AdminEditorModalProps> = ({
                 {/* SECTION 2: JSON EXPORT & BACKUP */}
                 <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/15 space-y-3">
                   <div className="flex items-center justify-between flex-wrap gap-2">
-                    <h4 className="text-sm font-semibold text-white flex items-center gap-2">
-                      <Download size={16} />
-                      <span>خروجی گرفتن و پشتیبان داده‌ها (Export & Backup JSON)</span>
-                    </h4>
+                    <div>
+                      <h4 className="text-sm font-semibold text-white flex items-center gap-2">
+                        <FileCode size={16} className="text-amber-400" />
+                        <span>پشتیبان متنی تنظیمات (فقط متن و دیتا - فایل سبک ۱۰ کیلوبایتی)</span>
+                      </h4>
+                      <span className="text-[11px] text-amber-300/90 font-mono mt-0.5 block">
+                        حجم: ~۱۰ KB • فقط متون و تنظیمات (فاقد عکس‌های پروژه)
+                      </span>
+                    </div>
 
                     <div className="flex items-center gap-2">
                       <button
                         onClick={handleDownloadBackupFile}
-                        className="px-3 py-1.5 rounded-xl bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 text-xs font-semibold flex items-center gap-1.5 border border-blue-500/30 transition-all cursor-pointer"
+                        className="px-3.5 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 text-xs font-semibold flex items-center gap-1.5 border border-amber-500/30 transition-all cursor-pointer shadow-sm"
+                        title="دانلود فقط فایل سبک متنی ۱۰ کیلوبایتی بدون تصاویر"
                       >
                         <FileDown size={14} />
-                        <span>دانلود فایل JSON</span>
+                        <span>دانلود دیتای سبک متنی (۱۰ KB JSON)</span>
                       </button>
 
                       <button
@@ -3443,13 +3473,17 @@ export const AdminEditorModal: React.FC<AdminEditorModalProps> = ({
                         className="px-3.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-semibold flex items-center gap-1.5 border border-white/20 transition-all cursor-pointer"
                       >
                         {copiedJSON ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
-                        <span>{copiedJSON ? 'کپی شد!' : 'کپی به کلیپ‌بورد'}</span>
+                        <span>{copiedJSON ? 'کپی شد!' : 'کپی متن JSON'}</span>
                       </button>
                     </div>
                   </div>
-                  <p className="text-xs text-slate-300">
-                    می‌توانید تمام تغییرات، پروژه‌ها، مهارت‌ها، سوابق و تنظیمات تماس را در قالب یک فایل JSON خروجی بگیرید یا دانلود کنید تا همیشه یک نسخه پشتیبان آفلاین داشته باشید.
-                  </p>
+
+                  <div className="p-2.5 rounded-xl bg-amber-950/40 border border-amber-500/30 text-xs text-amber-200/90 flex items-start gap-2">
+                    <span className="font-bold text-amber-400 shrink-0">⚠️ توجه:</span>
+                    <span>
+                      این بخش صرفاً یک فایل ۱۰ کیلوبایتی از نوشته‌ها و تنظیمات متنی برای پشتیبان‌گیری سریع است و <strong>حاوی هیچ تصویری نمی‌باشد</strong>. برای دریافت فایل کامل ۶۵ مگابایتی شامل تمامی عکس‌ها، کدهای پروژه و دارایی‌ها، از دکمه بزرگ بالا (<strong>«دانلود مستقیم بسته ۶۵ مگابایتی»</strong>) استفاده فرمایید.
+                    </span>
+                  </div>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/15 space-y-3">

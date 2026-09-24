@@ -1,6 +1,4 @@
-// THIS FILE IS AUTOMATICALLY SYNCHRONIZED WITH YOUR PORTFOLIO SETTINGS & ASSETS
-// Any changes saved in the Admin Studio are permanently baked into this file and /public/projects/images/
-
+// THIS FILE IS AUTOMATICALLY SYNCHRONIZED
 import { Project, SkillCategory, ExperienceItem, ProfileInfo, ContactDetails } from '../types';
 
 export const PROFILE_DATA: ProfileInfo = {
@@ -62,7 +60,6 @@ export const PROFILE_DATA: ProfileInfo = {
     }
   ]
 };
-
 export const DEFAULT_CONTACT_DETAILS: ContactDetails = {
   "heading": "Let's build together",
   "subheading": "Available for game development contracts, Unity systems programming, shader engineering, and technical advisory.",
@@ -92,7 +89,6 @@ export const DEFAULT_CONTACT_DETAILS: ContactDetails = {
     }
   ]
 };
-
 export const SKILL_CATEGORIES: SkillCategory[] = [
   {
     "id": "engines",
@@ -207,7 +203,6 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
     ]
   }
 ];
-
 export const PROJECTS_DATA: Project[] = [
   {
     "id": "forsaken-hospital",
@@ -241,20 +236,26 @@ export const PROJECTS_DATA: Project[] = [
     ],
     "githubUrl": "https://github.com/erfanJalali2007/Forsaken-Hospital-Prototype",
     "demoUrl": "",
-    "imageBanner": "/projects/images/project-1790066540583-0919-1-2--meisa.png",
+    "imageBanner": "/projects/images/forsaken-hospital-1790239786553-0924-4.png",
     "highlights": [
       "Modular architecture enabling rapid horror game mechanics authoring",
       "Zero-allocation raycasting and event delegates avoiding GC stutter",
       "Custom Unity Editor tools for rapid level designer workflow"
     ],
     "galleryImages": [
+      "/projects/images/forsaken-hospital-1790239786553-0924-4.png",
       "/projects/images/project-1790066540583-0919-1-2--meisa.png",
       "/projects/images/project-1790066540637-0919-1-4--poyzp.png",
       "/projects/images/project-1790066540643-0919-1-5--r4bns.png",
       "/projects/images/project-1790066540663-0919-1-6--117ev.png",
       "/projects/images/project-1790066540705-0919-1--1ebib.png",
       "/projects/images/project-1790066540613-0919-1-3--2ko6c.png",
-      "/projects/images/project-1790066620096-0919-1-1--gl4gj.png"
+      "/projects/images/project-1790066620096-0919-1-1--gl4gj.png",
+      "/projects/images/forsaken-hospital-1790239957838-0924.png",
+      "/projects/images/forsaken-hospital-1790239837601-0924-6.png",
+      "/projects/images/forsaken-hospital-1790239714088-0924-3.png",
+      "/projects/images/forsaken-hospital-1790239678661-0924-2.png",
+      "/projects/images/forsaken-hospital-1790249415916-0924-5.png"
     ],
     "releaseDate": "Sep 2026"
   },
@@ -286,7 +287,7 @@ export const PROJECTS_DATA: Project[] = [
       "Cinematic camera transitions and adaptive ambient soundscapes"
     ],
     "githubUrl": "",
-    "demoUrl": "",
+    "demoUrl": "https://myket.ir/app/com.EJGameDev.DarkHouse",
     "imageBanner": "/projects/images/project-1790066750168-loading-bar-iur85.png",
     "highlights": [
       "Bespoke horror sound design paired with 3D audio spatialization",
@@ -305,7 +306,6 @@ export const PROJECTS_DATA: Project[] = [
     "releaseDate": "May 2024"
   }
 ];
-
 export const EXPERIENCES_DATA: ExperienceItem[] = [
   {
     "id": "exp-1",
